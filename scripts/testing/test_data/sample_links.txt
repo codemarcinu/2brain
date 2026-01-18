@@ -1,0 +1,11 @@
+# Sample test links for E2E testing
+
+# YouTube
+https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+# Articles
+https://en.wikipedia.org/wiki/Artificial_intelligence
+https://docs.python.org/3/tutorial/index.html
+
+# Blog posts
+https://blog.python.org/

@@ -1,0 +1,3 @@
+"""
+Finance scripts package
+"""

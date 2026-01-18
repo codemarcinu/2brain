@@ -698,12 +698,12 @@ curl http://localhost:6333/collections/obsidian_notes
 ```
 
 ### Checklist:
-- [ ] Open Web UI działa na localhost:3000
-- [ ] Możliwość stworzenia konta
-- [ ] Model Ollama widoczny w Settings
-- [ ] RAG pipeline można włączyć
-- [ ] Wyszukiwanie w notatkach działa
-- [ ] Cytuje źródła (nazwy plików)
+- [x] Open Web UI działa na localhost:3000
+- [x] Możliwość stworzenia konta
+- [x] Model Ollama widoczny w Settings
+- [x] RAG pipeline można włączyć
+- [x] Wyszukiwanie w notatkach działa
+- [x] Cytuje źródła (nazwy plików)
 
 ## 📦 Pliki Wyjściowe
 
@@ -727,6 +727,6 @@ modules/chat/
 
 ---
 
-**Status:** 🟢 Gotowy
+**Status:** ✅ Ukończony
 **Czas:** ~45 minut
 **Następny:** Agent 7 (Migration & Testing)

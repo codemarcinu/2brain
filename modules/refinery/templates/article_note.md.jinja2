@@ -1,0 +1,52 @@
+---
+title: "{{ title }}"
+created: {{ created_at.strftime('%Y-%m-%d %H:%M') }}
+source: {{ url }}
+type: {{ article_type }}
+{% if author -%}
+author: "{{ author }}"
+{% endif -%}
+tags:
+{%- for tag in tags %}
+  - {{ tag }}
+{%- endfor %}
+---
+
+# {{ title }}
+
+{% if author -%}
+**Author:** {{ author }}
+{% endif -%}
+**Source:** [Read Original]({{ url }})
+**Type:** {{ article_type|capitalize }}
+
+## Summary
+
+{{ summary }}
+
+## Key Takeaways
+
+{% for point in key_points -%}
+- {{ point }}
+{% endfor %}
+
+{% if quotes -%}
+## Notable Quotes
+
+{% for quote in quotes -%}
+> {{ quote }}
+
+{% endfor %}
+{% endif -%}
+
+## Related Topics
+
+{% for topic in related_topics -%}
+- [[{{ topic }}]]
+{% endfor %}
+
+---
+
+## Full Content
+
+{{ content }}

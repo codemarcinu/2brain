@@ -1,0 +1,36 @@
+---
+title: "{{ title }}"
+created: {{ created_at.strftime('%Y-%m-%d %H:%M') }}
+source: {{ url }}
+type: {{ note_type }}
+tags:
+{%- for tag in tags %}
+  - {{ tag }}
+{%- endfor %}
+---
+
+# {{ title }}
+
+**Source:** [Original]({{ url }})
+
+## Summary
+
+{{ summary }}
+
+## Key Points
+
+{% for point in key_points -%}
+- {{ point }}
+{% endfor %}
+
+## Related Topics
+
+{% for topic in related_topics -%}
+- [[{{ topic }}]]
+{% endfor %}
+
+---
+
+## Content
+
+{{ content }}

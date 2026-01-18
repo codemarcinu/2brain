@@ -1,0 +1,14 @@
+# Vector DB
+qdrant-client>=1.7.0
+
+# Embeddings & LangChain
+langchain>=0.1.0
+langchain-community>=0.0.20
+ollama>=0.1.0
+
+# Document processing
+markdown>=3.5.0
+python-frontmatter>=1.1.0
+
+# Utilities
+tqdm>=4.66.0

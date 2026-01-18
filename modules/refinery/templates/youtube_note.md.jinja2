@@ -1,0 +1,41 @@
+---
+title: "{{ title }}"
+created: {{ created_at.strftime('%Y-%m-%d %H:%M') }}
+source: {{ url }}
+type: youtube
+channel: "{{ channel }}"
+duration: {{ duration_minutes }}min
+tags:
+{%- for tag in tags %}
+  - {{ tag }}
+{%- endfor %}
+category: {{ category }}
+---
+
+# {{ title }}
+
+**Channel:** [[{{ channel }}]]
+**Duration:** {{ duration_minutes }} minutes
+**Link:** [Watch on YouTube]({{ url }})
+
+## Summary
+
+{{ summary }}
+
+## Key Points
+
+{% for point in key_points -%}
+- {{ point }}
+{% endfor %}
+
+## Related Topics
+
+{% for topic in related_topics -%}
+- [[{{ topic }}]]
+{% endfor %}
+
+---
+
+## Full Transcript
+
+{{ transcript }}

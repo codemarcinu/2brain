@@ -1,0 +1,22 @@
+# Streamlit
+streamlit>=1.30.0
+
+# OCR
+pytesseract>=0.3.10
+pillow>=10.0.0
+opencv-python-headless>=4.8.0
+
+# Alternative OCR (optional)
+# paddleocr>=2.7.0
+
+# LLM for parsing
+openai>=1.10.0  # For DeepSeek API
+
+# Database
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0
+alembic>=1.13.0
+
+# Utilities
+pandas>=2.1.0
+plotly>=5.18.0  # For charts in UI

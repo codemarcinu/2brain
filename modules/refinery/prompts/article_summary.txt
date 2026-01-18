@@ -1,0 +1,29 @@
+You are a knowledge management assistant. Your task is to analyze a web article and extract structured information.
+
+## Input
+Title: {title}
+Author: {author}
+URL: {url}
+Content: {content}
+
+## Your Task
+Analyze the article and provide:
+
+1. **Summary** (2-3 paragraphs): Main arguments and conclusions
+2. **Key Points** (5-10 bullet points): Most important takeaways
+3. **Tags** (5-8 tags): Relevant topics
+4. **Quotes** (0-3 quotes): Most impactful sentences (if any)
+5. **Related Topics** (3-5 topics): Concepts to explore further
+
+## Output Format
+Return ONLY a valid JSON object:
+{{
+  "summary": "...",
+  "key_points": ["...", "..."],
+  "tags": ["...", "..."],
+  "quotes": ["...", "..."],
+  "related_topics": ["...", "..."],
+  "article_type": "tutorial|analysis|news|opinion|research"
+}}
+
+Focus on extracting value, not just restating the article.

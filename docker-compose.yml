@@ -85,15 +85,27 @@ services:
     container_name: brain-chat
     ports:
       - "3000:8080"
+    volumes:
+      - ./data/open-webui:/app/backend/data
+      - ${OBSIDIAN_VAULT_PATH}:/vault:ro
+      - ./modules/chat/pipelines:/app/pipelines:ro
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
-      - ENABLE_RAG_WEB_SEARCH=true
-    volumes:
-      - ./data/open-webui:/app/backend/data
+      - ENABLE_RAG_WEB_SEARCH=false
+      - ENABLE_OLLAMA_API=true
+      - RAG_EMBEDDING_MODEL=nomic-embed-text:latest
+      - RAG_EMBEDDING_MODEL_TRUST_REMOTE_CODE=true
+      - CHUNK_SIZE=1000
+      - CHUNK_OVERLAP=100
+      - RAG_TOP_K=5
+      - VECTOR_DB=qdrant
+      - QDRANT_URL=http://qdrant:6333
     depends_on:
       ollama:
         condition: service_healthy
+      qdrant:
+        condition: service_started
     networks:
       - brain-network
     restart: unless-stopped
@@ -115,6 +127,52 @@ services:
     command: sh -c "pip install -e /shared && python main.py"
     depends_on:
       redis:
+        condition: service_healthy
+    networks:
+      - brain-network
+    restart: unless-stopped
+
+  refinery:
+    build:
+      context: ./modules/refinery
+      dockerfile: Dockerfile
+    container_name: brain-refinery
+    volumes:
+      - ${OBSIDIAN_VAULT_PATH}:/vault
+      - ./shared:/shared
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - REDIS_HOST=redis
+      - OLLAMA_HOST=http://ollama:11434
+      - OBSIDIAN_VAULT_PATH=/vault
+    command: sh -c "pip install -e /shared && python main.py"
+    depends_on:
+      redis:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+    networks:
+      - brain-network
+    restart: unless-stopped
+
+  finance:
+    build:
+      context: ./modules/finance
+      dockerfile: Dockerfile
+    container_name: brain-finance
+    ports:
+      - "8501:8501"
+    volumes:
+      - ${INBOX_PATH}/receipts:/inbox/receipts
+      - ./shared:/shared:ro
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=postgres
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    depends_on:
+      postgres:
         condition: service_healthy
     networks:
       - brain-network

@@ -846,12 +846,12 @@ docker exec -it brain-postgres psql -U brain -d obsidian_brain -c "SELECT * FROM
 ```
 
 ### Checklist:
-- [ ] Streamlit UI działa na localhost:8501
-- [ ] OCR wyciąga tekst z paragonu
-- [ ] LLM parsuje do struktury JSON
-- [ ] Edycja pozycji w tabeli działa
-- [ ] Zapis do PostgreSQL działa
-- [ ] Dashboard pokazuje wydatki
+- [x] Streamlit UI działa na localhost:8501
+- [x] OCR wyciąga tekst z paragonu
+- [x] LLM parsuje do struktury JSON
+- [x] Edycja pozycji w tabeli działa
+- [x] Zapis do PostgreSQL działa
+- [x] Dashboard pokazuje wydatki
 
 ## 📦 Pliki Wyjściowe
 
@@ -865,5 +865,5 @@ Kompletny mikroserwis `modules/finance/` z UI.
 
 ---
 
-**Status:** 🟢 Gotowy
+**Status:** ✅ Zaimplementowany
 **Czas:** ~60 minut
