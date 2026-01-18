@@ -1,5 +1,5 @@
 # Git Operations
 
-- [ ] Stage documentation changes <!-- id: 0 -->
-- [ ] Commit changes <!-- id: 1 -->
-- [ ] Push to remote <!-- id: 2 -->
+- [x] Stage documentation changes <!-- id: 0 -->
+- [x] Commit changes <!-- id: 1 -->
+- [x] Push to remote <!-- id: 2 -->

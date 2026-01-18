@@ -1,0 +1,1 @@
+{"QDRANT_URL": "http://qdrant:6333", "COLLECTION_NAME": "obsidian_notes", "TOP_K": 5, "SIMILARITY_THRESHOLD": 0.7, "OLLAMA_BASE_URL": "http://ollama:11434", "EMBEDDING_MODEL": "nomic-embed-text", "pipelines": ["*"]}
