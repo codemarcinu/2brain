@@ -760,14 +760,14 @@ docker exec brain-redis redis-cli LLEN queue:refinery
 
 ### Checklist końcowy:
 
-- [ ] Struktura katalogów zgodna z planem
-- [ ] Dockerfile buduje się bez błędów
-- [ ] Serwis startuje i loguje "collector_service_ready"
-- [ ] Watchdog wykrywa nowe pliki w Inbox
-- [ ] YouTube download + transcription działa
-- [ ] Web scraping działa
-- [ ] Zadania trafiają do Redis queue:refinery
-- [ ] Błędy są logowane bez crashowania serwisu
+- [x] Struktura katalogów zgodna z planem
+- [x] Dockerfile buduje się bez błędów
+- [x] Serwis startuje i loguje "collector_service_ready"
+- [x] Watchdog wykrywa nowe pliki w Inbox
+- [x] YouTube download + transcription działa
+- [x] Web scraping działa
+- [x] Zadania trafiają do Redis queue:refinery
+- [x] Błędy są logowane bez crashowania serwisu
 
 ## 📦 Pliki Wyjściowe
 

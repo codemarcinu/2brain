@@ -44,9 +44,9 @@ def test_listen_to_queue(redis_client):
     assert result is not None
 
 
-def test_task_queue_wrapper():
+def test_task_queue_wrapper(redis_client):
     """Test wysokopoziomowego API"""
-    queue = TaskQueue()
+    queue = TaskQueue(redis_client=redis_client)
     
     task = ArticleTask(
         id="art_001",
@@ -54,5 +54,5 @@ def test_task_queue_wrapper():
         content="Test content"
     )
     
-    result = queue.send_to_refinery(task.model_dump())
+    result = queue.send_to_refinery(task.model_dump(mode='json'))
     assert result is True

@@ -1,8 +1,8 @@
-version: '3.8'
+
 
 services:
   # --- Core Infrastructure ---
-  
+
   redis:
     image: redis:7-alpine
     container_name: brain-redis
@@ -12,7 +12,7 @@ services:
       - ./data/redis:/data
     command: redis-server --appendonly yes
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -32,7 +32,7 @@ services:
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -55,9 +55,9 @@ services:
           devices:
             - driver: nvidia
               count: all
-              capabilities: [gpu]
+              capabilities: [ gpu ]
     healthcheck:
-      test: ["CMD", "ollama", "list"]
+      test: [ "CMD", "ollama", "list" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -93,6 +93,28 @@ services:
       - ./data/open-webui:/app/backend/data
     depends_on:
       ollama:
+        condition: service_healthy
+    networks:
+      - brain-network
+    restart: unless-stopped
+
+  # --- Agent Services ---
+
+  collector:
+    build:
+      context: ./modules/collector
+      dockerfile: Dockerfile
+    container_name: brain-collector
+    volumes:
+      - ${INBOX_PATH}:/inbox
+      - ./shared:/shared
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - REDIS_HOST=redis
+      - INBOX_PATH=/inbox
+    command: sh -c "pip install -e /shared && python main.py"
+    depends_on:
+      redis:
         condition: service_healthy
     networks:
       - brain-network

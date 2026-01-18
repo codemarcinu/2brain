@@ -886,13 +886,13 @@ python -c "from shared.types import ArticleTask; t = ArticleTask(id='test', url=
 
 ### Checklist końcowy:
 
-- [ ] Struktura katalogów zgodna z zadaniem
-- [ ] `pip install -e ./shared` działa bez błędów
-- [ ] Wszystkie moduły importują się poprawnie
-- [ ] RedisClient łączy się z Redis z Agenta 1
-- [ ] Testy jednostkowe przechodzą
-- [ ] Dokumentacja README.md kompletna
-- [ ] Pydantic models walidują dane poprawnie
+- [x] Struktura katalogów zgodna z zadaniem
+- [x] `pip install -e ./shared` działa bez błędów
+- [x] Wszystkie moduły importują się poprawnie
+- [x] RedisClient łączy się z Redis z Agenta 1
+- [x] Testy jednostkowe przechodzą
+- [x] Dokumentacja README.md kompletna
+- [x] Pydantic models walidują dane poprawnie
 
 ## 📦 Pliki Wyjściowe
 
