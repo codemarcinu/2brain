@@ -145,6 +145,15 @@ obsidian-brain-v2/
 └── docs/                    # Documentation
 ```
 
+## 📚 Documentation
+
+For more detailed information, please refer to:
+
+- **[User Manual (PL)](docs/PODRECZNIK_UZYTKOWNIKA.md)**: How to use Collector, Finance, and Chat features.
+- **[Technical Documentation (PL)](docs/DOKUMENTACJA_TECHNICZNA.md)**: Deep dive into architecture, schemas, and API.
+- **[Migration Guide](docs/MIGRATION_GUIDE.md)**: How to upgrade from v1.
+- **[Project Status](docs/PROJECT_STATUS.md)**: Current roadmap and completed features.
+
 ## 🤝 Contributing
 See `docs/PROJECT_STATUS.md` for current progress and roadmap.
 

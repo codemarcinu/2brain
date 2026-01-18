@@ -1,5 +1,5 @@
-# Git Verification & Push
+# Git Operations
 
-- [x] Verify .gitignore <!-- id: 0 -->
-- [x] Prepare commits <!-- id: 1 -->
-- [/] Push to remote <!-- id: 2 -->
+- [ ] Stage documentation changes <!-- id: 0 -->
+- [ ] Commit changes <!-- id: 1 -->
+- [ ] Push to remote <!-- id: 2 -->
