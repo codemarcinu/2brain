@@ -55,8 +55,8 @@ The AI will mention which notes it used:
 ## Tips for Best Results
 
 ### 1. Use Specific Queries
-- Bad: "Tell me about AI"
-- Good: "What are the key points from my AI courses notes?"
+❌ "Tell me about AI"
+✅ "What are the key points from my AI courses notes?"
 
 ### 2. Reference Your Notes
 - "What did I write about X?"

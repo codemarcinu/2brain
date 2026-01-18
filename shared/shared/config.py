@@ -26,6 +26,12 @@ class Settings(BaseSettings):
     ollama_host: str = "http://ollama:11434"
     ollama_model: str = "deepseek-r1:14b"
     
+    # Qdrant
+    qdrant_host: str = "http://qdrant:6333"
+    
+    # Open WebUI
+    open_webui_host: str = "http://open-webui:8080"
+    
     # WebUI
     webui_secret_key: str = "changeme"
     

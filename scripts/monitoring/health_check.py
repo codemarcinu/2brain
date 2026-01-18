@@ -51,7 +51,10 @@ class HealthChecker:
     def check_ollama(self) -> bool:
         """Check Ollama"""
         try:
-            response = requests.get(f"{settings.ollama_host}/api/tags", timeout=5)
+            url = settings.ollama_host
+            if not url.startswith(('http://', 'https://')):
+                url = f"http://{url}"
+            response = requests.get(f"{url}/api/tags", timeout=5)
             response.raise_for_status()
             logger.info("ollama_healthy")
             return True
@@ -62,7 +65,7 @@ class HealthChecker:
     def check_qdrant(self) -> bool:
         """Check Qdrant"""
         try:
-            response = requests.get("http://qdrant:6333/", timeout=5)
+            response = requests.get(f"{settings.qdrant_host}/", timeout=5)
             response.raise_for_status()
             logger.info("qdrant_healthy")
             return True
@@ -73,7 +76,7 @@ class HealthChecker:
     def check_open_webui(self) -> bool:
         """Check Open Web UI"""
         try:
-            response = requests.get("http://open-webui:8080/health", timeout=5)
+            response = requests.get(f"{settings.open_webui_host}/health", timeout=5)
             response.raise_for_status()
             logger.info("open_webui_healthy")
             return True

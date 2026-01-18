@@ -1,5 +1,3 @@
-
-
 services:
   # --- Core Infrastructure ---
 
@@ -94,12 +92,13 @@ services:
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
       - ENABLE_RAG_WEB_SEARCH=false
       - ENABLE_OLLAMA_API=true
-      - RAG_EMBEDDING_MODEL=nomic-embed-text
+      - RAG_EMBEDDING_MODEL=nomic-embed-text:latest
       - RAG_EMBEDDING_MODEL_TRUST_REMOTE_CODE=true
       - CHUNK_SIZE=1000
       - CHUNK_OVERLAP=100
       - RAG_TOP_K=5
       - VECTOR_DB=qdrant
+      - QDRANT_URL=http://qdrant:6333
       - QDRANT_URI=http://qdrant:6333
     depends_on:
       ollama:
