@@ -109,6 +109,23 @@ services:
       - brain-network
     restart: unless-stopped
 
+  pipelines:
+    image: ghcr.io/open-webui/pipelines:main
+    container_name: brain-pipelines
+    ports:
+      - "9099:9099"
+    volumes:
+      - ./modules/chat/pipelines:/app/pipelines
+    environment:
+      - RESET_PIPELINES_DIR=false
+      - PIPELINES_REQUIREMENTS_PATH=/app/pipelines/requirements.txt
+      - PIPELINES_API_KEY=0p3n-w3bu!
+      - CORS_ENABLED=true
+      - CORS_ORIGINS=http://localhost:3000,http://open-webui:8080
+    networks:
+      - brain-network
+    restart: unless-stopped
+
   # --- Agent Services ---
 
   collector:
