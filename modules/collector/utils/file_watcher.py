@@ -3,7 +3,7 @@ Watchdog observer dla folderu Inbox
 """
 from pathlib import Path
 from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler, FileCreatedEvent
+from watchdog.events import FileSystemEventHandler, FileCreatedEvent, FileModifiedEvent
 from typing import Callable, Optional
 import time
 from shared.logging import get_logger
@@ -23,23 +23,34 @@ class InboxFileHandler(FileSystemEventHandler):
     
     def on_created(self, event: FileCreatedEvent):
         """Wywołane gdy nowy plik zostanie utworzony"""
+        logger.debug("on_created event received", src_path=event.src_path, is_directory=event.is_directory)
         if event.is_directory:
             return
         
-        file_path = Path(event.src_path)
-        
-        self._process_file_safe(file_path)
+        self._process_file_safe(Path(event.src_path))
+
+    def on_modified(self, event: FileModifiedEvent):
+        """Wywołane gdy plik zostanie zmodyfikowany"""
+        logger.debug("on_modified event received", src_path=event.src_path, is_directory=event.is_directory)
+        if event.is_directory:
+            return
+            
+        self._process_file_safe(Path(event.src_path))
 
     def _process_file_safe(self, file_path: Path):
         """Bezpieczne przetwarzanie pliku z logowaniem błędów"""
         try:
             # Ignoruj pliki tymczasowe i ukryte
-            if file_path.name.startswith('.') or file_path.suffix == '.tmp':
+            if file_path.name.startswith('.'):
+                logger.debug("file_ignored", file=file_path.name, reason="starts with '.'")
+                return
+            if file_path.suffix == '.tmp':
+                logger.debug("file_ignored", file=file_path.name, reason="has '.tmp' suffix")
                 return
             
             # Akceptuj tylko .txt i .url
             if file_path.suffix not in ['.txt', '.url']:
-                logger.debug("file_ignored", file=file_path.name)
+                logger.debug("file_ignored", file=file_path.name, reason="unsupported suffix")
                 return
             
             # Poczekaj chwilę na zakończenie zapisu pliku (częsty problem w watchdog)

@@ -26,6 +26,9 @@ class Settings(BaseSettings):
     ollama_host: str = "http://ollama:11434"
     ollama_model: str = "deepseek-r1:14b"
     
+    # WebUI
+    webui_secret_key: str = "changeme"
+    
     # API Keys (opcjonalne)
     openai_api_key: str = ""
     gemini_api_key: str = ""

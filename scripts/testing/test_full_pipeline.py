@@ -17,7 +17,7 @@ class TestFullPipeline:
     @pytest.fixture
     def redis(self):
         """Redis client"""
-        return RedisClient()
+        return RedisClient(host=settings.redis_host)
     
     @pytest.fixture
     def inbox_path(self):
@@ -34,11 +34,14 @@ class TestFullPipeline:
         Test: Link YouTube → Collector → Redis → Refinery → Vault
         """
         # 1. Wrzuć link do Inbox
-        test_link = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        test_link = "https://www.youtube.com/watch?v=F3QfS2U_P5c" # Grand tour of the International Space Station with Drew and Luca | Single take
         test_file = inbox_path / "test_youtube.txt"
         
         with open(test_file, 'w') as f:
             f.write(test_link)
+        
+        # Give the collector a moment to detect the new file
+        time.sleep(5)
         
         # 2. Poczekaj na Collector (max 60s)
         start_time = time.time()

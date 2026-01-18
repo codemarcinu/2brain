@@ -10,7 +10,15 @@ RUN apt-get update && apt-get install -y \
     git \
     libsndfile1 \
     libgomp1 \
+    curl \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Deno for yt-dlp
+ENV DENO_INSTALL /usr/local
+ENV PATH $DENO_INSTALL/bin:$PATH
+RUN curl -fsSL https://deno.land/install.sh | sh
+RUN deno --version
 
 # Stwórz katalog aplikacji
 WORKDIR /app

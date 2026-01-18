@@ -121,7 +121,7 @@ services:
       - ${INBOX_PATH}:/inbox
       - ./shared:/shared
     environment:
-      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_LEVEL=${LOG_LEVEL:-DEBUG}
       - REDIS_HOST=redis
       - INBOX_PATH=/inbox
     command: sh -c "pip install -e /shared && python main.py"
@@ -140,11 +140,17 @@ services:
     volumes:
       - ${OBSIDIAN_VAULT_PATH}:/vault
       - ./shared:/shared
+      - ./scripts:/scripts
     environment:
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
       - REDIS_HOST=redis
       - OLLAMA_HOST=http://ollama:11434
       - OBSIDIAN_VAULT_PATH=/vault
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
     command: sh -c "pip install -e /shared && python main.py"
     depends_on:
       redis:
