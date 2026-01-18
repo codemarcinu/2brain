@@ -63,7 +63,7 @@ class NoteMigrator:
             return False
         
         # Skip templates
-        if 'templates' in file_path.parts.lower():
+        if 'templates' in [p.lower() for p in file_path.parts]:
             return False
         
         # Only markdown files

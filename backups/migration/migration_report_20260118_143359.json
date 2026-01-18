@@ -1,0 +1,229 @@
+{
+  "started_at": "2026-01-18T14:33:57.414401",
+  "migrated": [
+    {
+      "file": "000_MOC_Biznes.md",
+      "size": 222,
+      "mtime": 1768651274.7304742
+    },
+    {
+      "file": "000_MOC_Compliance.md",
+      "size": 1497,
+      "mtime": 1768651274.7178266
+    },
+    {
+      "file": "000_MOC_Cybersec.md",
+      "size": 1495,
+      "mtime": 1768651274.7220309
+    },
+    {
+      "file": "000_MOC_Data_engineering.md",
+      "size": 265,
+      "mtime": 1768333428.5428183
+    },
+    {
+      "file": "000_MOC_Productivity.md",
+      "size": 405,
+      "mtime": 1768651274.7350197
+    },
+    {
+      "file": "000_MOC_Tech.md",
+      "size": 142,
+      "mtime": 1768651274.7259347
+    },
+    {
+      "file": "00_Dashboard.md",
+      "size": 899,
+      "mtime": 1768588084.7538195
+    },
+    {
+      "file": "Recovery.md",
+      "size": 297,
+      "mtime": 1768219842.919391
+    },
+    {
+      "file": "Stan Wykorzystania API OpenAI.md",
+      "size": 571,
+      "mtime": 1768510817.7465782
+    },
+    {
+      "file": "00_Skrzynka/reading_list.md",
+      "size": 993,
+      "mtime": 1768590515.7015178
+    },
+    {
+      "file": "00_Skrzynka/youtube_queue.md",
+      "size": 588,
+      "mtime": 1768640894.2899268
+    },
+    {
+      "file": "Badania/2026-01-15-web-ai-bez-lukru-4-ai-odrabia-lekcje-nauczyciele-\u0142api\u0105-si\u0119-za-g\u0142.md",
+      "size": 2471,
+      "mtime": 1768487361.3091886
+    },
+    {
+      "file": "Badania/2026-01-15-web-australia-zakaz-medi\u00f3w-spo\u0142eczno\u015bciowych-do-16-roku-\u017cycia-pr.md",
+      "size": 2160,
+      "mtime": 1768488293.3894145
+    },
+    {
+      "file": "Badania/2026-01-15-web-gemini-z-now\u0105-supermoc\u0105-poznajcie-personal-intelligence-od-g.md",
+      "size": 2043,
+      "mtime": 1768457179.1441982
+    },
+    {
+      "file": "Dziennik/2026-01-13.md",
+      "size": 383,
+      "mtime": 1768333511.577811
+    },
+    {
+      "file": "Dziennik/2026-01-14.md",
+      "size": 416,
+      "mtime": 1768370384.33879
+    },
+    {
+      "file": "Dziennik/2026-01-15.md",
+      "size": 641,
+      "mtime": 1768480203.325
+    },
+    {
+      "file": "Dziennik/2026-01-16.md",
+      "size": 431,
+      "mtime": 1768570834.476
+    },
+    {
+      "file": "Edukacja/Drive_0824_Narzedziownik_OSINT_2_0_Reloaded.md",
+      "size": 2556,
+      "mtime": 1768553489.4153187
+    },
+    {
+      "file": "Edukacja/Drive_0824_Narz\u0119dzia i techniki OSINT - Krzysztof Wosi\u0144ski_transkrypcja_20260116_100744.md",
+      "size": 30542,
+      "mtime": 1768553218.4408264
+    },
+    {
+      "file": "Edukacja/Drive_0824_Narz\u0119dziownik OSINT 20 Reloaded - sesja 1_transkrypcja.md",
+      "size": 46891,
+      "mtime": 1768557134.9315102
+    },
+    {
+      "file": "Edukacja/Drive_0824_Narz\u0119dziownik OSINT 20 Reloaded - sesja 2_transkrypcja.md",
+      "size": 36143,
+      "mtime": 1768554485.6064036
+    },
+    {
+      "file": "Edukacja/Drive_0824_Narz\u0119dziownik OSINT 20 Reloaded - sesja 3_transkrypcja.md",
+      "size": 35801,
+      "mtime": 1768554495.5867863
+    },
+    {
+      "file": "Edukacja/Drive_0824_Narz\u0119dziownik OSINT 20 Reloaded - sesja 4_transkrypcja.md",
+      "size": 22325,
+      "mtime": 1768554505.231875
+    },
+    {
+      "file": "Edukacja/Drive_0824_Narz\u0119dziownik OSINT 20 Reloaded - sesja 5_transkrypcja.md",
+      "size": 30468,
+      "mtime": 1768554513.0662482
+    },
+    {
+      "file": "Edukacja/Drive_0824_Narz\u0119dziownik OSINT 20 Reloaded - sesja 6_transkrypcja.md",
+      "size": 31201,
+      "mtime": 1768554521.2872274
+    },
+    {
+      "file": "Edukacja/Drive_0824_Narz\u0119dziownik OSINT 20 Reloaded - sesja 7_transkrypcja.md",
+      "size": 32536,
+      "mtime": 1768553973.2722309
+    },
+    {
+      "file": "Edukacja/Drive_0922_Kopia Narz\u0119dzia i techniki OSINT - Krzysztof Wosi\u0144ski_transkrypcja.md",
+      "size": 31197,
+      "mtime": 1768553981.151228
+    },
+    {
+      "file": "Edukacja/Nie jeste\u015b odpowiedzialny za CUDZE EMOCJE.md",
+      "size": 5000,
+      "mtime": 1768659556.0620165
+    },
+    {
+      "file": "Edukacja/Poznaj 10 umiej\u0119tno\u015bci AI niezb\u0119dnych w 2026 roku.md",
+      "size": 20600,
+      "mtime": 1768641047.2690344
+    },
+    {
+      "file": "Edukacja/Wprowadzenie do bezpiecze\u0144stwa frontendu aplikacji webowych - SekurakAcademy 2025.md",
+      "size": 19931,
+      "mtime": 1768548211.899133
+    },
+    {
+      "file": "Przegl\u0105d/48 os\u00f3b marnuje czas w czatach I nawet o tym nie wie.md",
+      "size": 2856,
+      "mtime": 1768554634.068465
+    },
+    {
+      "file": "Przegl\u0105d/PSYCHOLOG OSTRZEGA Te 3 rzeczy robi 90 kobiet kt\u00f3re nie mog\u0105 znale\u017a\u0107 faceta  TrudnaSztuka.md",
+      "size": 12365,
+      "mtime": 1768580897.4259229
+    },
+    {
+      "file": "Research/2026-01-16-web-pracodawcy-b\u0119d\u0105-zmuszeni-podnosi\u0107-wynagrodzenia-d\u0142ugoletnim-.md",
+      "size": 2548,
+      "mtime": 1768590514.8384159
+    },
+    {
+      "file": "Zasoby/Lista Zakup\u00f3w.md",
+      "size": 450,
+      "mtime": 1768426309.5663488
+    },
+    {
+      "file": "Zasoby/Spi\u017carnia.md",
+      "size": 2773,
+      "mtime": 1768474133.861009
+    },
+    {
+      "file": "Zasoby/Stan_Spi\u017carni.md",
+      "size": 1368,
+      "mtime": 1768426309.5763505
+    },
+    {
+      "file": "00_Skrzynka/Archive/Drive_0824_Narzedziownik_OSINT_2_0_Reloaded.md",
+      "size": 109802,
+      "mtime": 1768555376.573486
+    },
+    {
+      "file": "00_Skrzynka/_ERRORS/Drive_0824_Narzedziownik_OSINT_2_0_Reloaded.md",
+      "size": 225177,
+      "mtime": 1768561014.3203223
+    },
+    {
+      "file": "Paragony/2026/2026-01/2024-01-17_Paragon_Biedronka_Zakupy.md",
+      "size": 9048,
+      "mtime": 1768664539.710484
+    },
+    {
+      "file": "Paragony/2026/2026-01/2024-05-12_Paragon_Biedronka_Zakupy.md",
+      "size": 9048,
+      "mtime": 1768664540.498237
+    },
+    {
+      "file": "Paragony/2026/2026-01/2026-01-13_Paragon_Biedronka_Zakupy.md",
+      "size": 4728,
+      "mtime": 1768467798.9124682
+    },
+    {
+      "file": "Zasoby/Review/Briefing-2026-01-12.md",
+      "size": 2681,
+      "mtime": 1768219868.2119524
+    }
+  ],
+  "skipped": [],
+  "errors": [],
+  "completed_at": "2026-01-18T14:33:59.145770",
+  "summary": {
+    "total_files": 43,
+    "migrated": 43,
+    "skipped": 0,
+    "errors": 0
+  }
+}
