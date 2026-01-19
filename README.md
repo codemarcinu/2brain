@@ -11,6 +11,8 @@ A microservices-based system for automating your Second Brain in Obsidian. Trans
 - **🤖 AI Refinery**: Processes raw content into structured Markdown notes.
 - **💰 Finance Tracker**: Optimized **Async Receipt Pipeline** for ultra-fast OCR and data extraction using caching and fuzzy matching.
 - **💬 AI Chat (RAG)**: Chat with your knowledge base using Open Web UI.
+- **👁️ Human In The Loop**: Streamlit dashboard for verifying and approving extracted financial data.
+- **📦 Intelligent Pantry**: Ledger-based inventory management (Agent 09) integrated with receipt processing.
 - **🧠 Brain CLI**: Terminal Dashboard for status monitoring and management.
 
 ## 🏗️ Architecture
@@ -28,7 +30,12 @@ graph LR
         Q1 --> R[Refinery]
         Q1 --> F[Finance]
         R -->|Markdown| V[Obsidian Vault]
-        F -->|JSON| Archive[Data Archive]
+        F -->|Verified: False| DB[(PostgreSQL)]
+        DB -->|HITL| Dashboard[Streamlit Dashboard]
+        Dashboard -->|Approve| DB
+        Dashboard -->|Trigger| P[Pantry Service]
+        P -->|Ledger| DB
+        P -->|Views| V
     end
 
     subgraph Intelligence
@@ -49,6 +56,7 @@ graph LR
 | **Collector** | Python | Watchdog service. Routes links vs images (receipts). |
 | **Refinery** | Python, LangChain | AI Worker for content processing. |
 | **Finance** | Python (Headless) | Receipt OCR and LLM extraction service. |
+| **Pantry** | Python | Ledger-based inventory and supply chain agent. |
 | **Chat** | Open Web UI | ChatGPT-like interface for chatting with your notes. |
 | **CLI** | Python, Rich | Terminal UI for status and management. |
 
@@ -105,7 +113,9 @@ To process a receipt, you can either:
   ```bash
   python brain.py finance /path/to/receipt.jpg
   ```
-The system will OCR the receipt and save structured data to `data/receipts_archive`.
+The system will OCR the receipt and save it to a **PostgreSQL database**. 
+- **Verification**: Open the dashboard, go to the **Human In The Loop** tab, and approve the data to finalize it.
+- **Analysis**: Approved receipts are visible in the **Expenses Analysis** tab.
 
 ### 3. Chatting with Notes
 1. Open http://localhost:3000

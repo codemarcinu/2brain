@@ -5,6 +5,8 @@ I have successfully implemented the **Async Receipt Pipeline**, a high-performan
 ## 🚀 Key Improvements
 
 - **Architecture**: Shifted from a simple linear process to a multi-stage async pipeline.
+- **Data Persistence**: Integrated with an external PostgreSQL database (`psql01.mikr.us`).
+- **Human In The Loop**: Added a verification layer where users must approve extracted data in a UI before it's finalized.
 - **Caching**: Implemented a 3-tier cache (Exact Match, LRU, Shop Patterns) to instantly resolve known items.
 - **Fuzzy Matching**: Added parallel CPU-bound fuzzy matching using partial_ratio.
 - **Cost Reduction**: LLM (DeepSeek/Ollama) is now only invoked as a fallback when cache/fuzzy coverage is low (<30%).
@@ -15,9 +17,11 @@ I have successfully implemented the **Async Receipt Pipeline**, a high-performan
 | Component | File | Description |
 | --- | --- | --- |
 | **Pipeline Service** | `modules/finance/services/async_receipt_pipeline.py` | Orchestrates the flow (Cache -> Fuzzy -> AI). |
+| **Database Init** | `scripts/db_init.py` | Sets up the `expenses` table on the production PostgreSQL. |
+| **HITL Dashboard** | `scripts/monitoring/dashboard.py` | New Streamlit tab for verification and editing of receipts. |
 | **Receipt Cache** | `modules/finance/utils/receipt_cache.py` | Manages persisting and looking up known products. |
-| **Taxonomy Guard** | `modules/finance/utils/taxonomy.py` | Normalizes OCR text to canonical product names (from `product_taxonomy.json`). |
-| **Shop Agents** | `modules/finance/utils/receipt_agents/` | Heuristics for specific shops (e.g. Biedronka) to clean text/dates. |
+| **Taxonomy Guard** | `modules/finance/utils/taxonomy.py` | Normalizes OCR text to canonical names. |
+| **Shop Agents** | `modules/finance/utils/receipt_agents/` | Heuristics for specific shops. |
 | **LLM Adapter** | `modules/finance/adapters/llm_adapter.py` | Async wrapper for OpenAI-compatible local LLMs. |
 
 ## 🧪 Verification

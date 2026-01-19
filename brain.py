@@ -21,6 +21,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = typer.Typer(help="Obsidian Brain v2 Controller")
+pantry_app = typer.Typer(help="Pantry & Inventory Management (Agent 09)")
+app.add_typer(pantry_app, name="pantry")
 console = Console()
 
 @app.command()
@@ -119,6 +121,66 @@ def finance(file: Path):
         console.print("[dim]Collector will pick it up and route to Finance module.[/dim]")
     except Exception as e:
         console.print(f"[red]Failed to copy file: {e}[/red]")
+
+
+# --- PANTRY COMMANDS ---
+
+@pantry_app.command("status")
+def pantry_status():
+    """Show current pantry stock"""
+    try:
+        from modules.pantry.core.services.pantry_service import PantryService
+        service = PantryService()
+        state = service.repo.get_pantry_state()
+        
+        table = Table(title="Pantry Inventory", box=box.ROUNDED)
+        table.add_column("Category", style="dim")
+        table.add_column("Product", style="cyan")
+        table.add_column("Stock", style="magenta", justify="right")
+        table.add_column("Min", style="dim", justify="right")
+        table.add_column("Status", justify="center")
+        
+        for item in state:
+            status = "[green]✅[/green]"
+            if item['stan'] <= 0: status = "[red]❌[/red]"
+            elif item['stan'] < item['minimum_ilosc']: status = "[yellow]⚠️[/yellow]"
+            
+            table.add_row(
+                item['kategoria'],
+                item['nazwa'],
+                f"{item['stan']:.1f} {item['jednostka_miary']}",
+                f"{item['minimum_ilosc']:.1f}",
+                status
+            )
+        
+        console.print(table)
+    except Exception as e:
+        console.print(f"[red]Error loading pantry: {e}[/red]")
+
+@pantry_app.command("consume")
+def pantry_consume(name: str, qty: float):
+    """Record consumption of a product"""
+    try:
+        from modules.pantry.core.services.pantry_service import PantryService
+        service = PantryService()
+        if service.consume_product(name, qty):
+            console.print(f"[green]✅ Consumed {qty} of {name}[/green]")
+            console.print("[dim]Obsidian views updated.[/dim]")
+        else:
+            console.print(f"[red]❌ Product '{name}' not found or error occurred.[/red]")
+    except Exception as e:
+        console.print(f"[red]Error recording consumption: {e}[/red]")
+
+@pantry_app.command("refresh")
+def pantry_refresh():
+    """Force refresh Obsidian views"""
+    try:
+        from modules.pantry.core.services.pantry_service import PantryService
+        service = PantryService()
+        service.refresh_views()
+        console.print("[green]✅ Obsidian pantry views refreshed![/green]")
+    except Exception as e:
+        console.print(f"[red]Error refreshing views: {e}[/red]")
 
 
 if __name__ == "__main__":

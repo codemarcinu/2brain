@@ -2,7 +2,7 @@
 
 **Wersja:** 2.0.0
 **Status:** MVP Ukończone
-**Data:** 18.01.2026
+**Data:** 19.01.2026
 
 ## 1. Przegląd Systemu
 
@@ -57,12 +57,19 @@ graph TD
     Refinery -->|Markdown| Vault
     
     Finance -->|OCR/Parse| Ollama
-    Finance -->|Data| PG
+    Finance -->|Save Pending| PG
     Phone -->|Image| Finance
+    
+    PG -->|Verify/Edit| Streamlit[Streamlit Dashboard]
+    Streamlit -->|Save Verified| PG
     
     Vault -->|Index| Qdrant
     Chat -->|RAG| Qdrant
     Chat -->|LLM| Ollama
+    
+    Dashboard -->|Trigger| Pantry[Pantry Service]
+    Pantry -->|Ledger| PG
+    Pantry -->|Markdown| Vault
 ```
 
 ### Stos Technologiczny
@@ -117,7 +124,7 @@ System działa w modelu kaskadowym (waterfall) w celu minimalizacji użycia LLM:
 3.  **Warstwa 3 (AI Fallback):** Asynchroniczne wywołanie LLM (DeepSeek-R1) tylko gdy "pokrycie" paragonu jest niskie (<30%).
 4.  **Normalizacja:** `TaxonomyGuard` dba o spójność nazw, kategorii i jednostek (np. "MLEKO UHT" -> "Mleko 3.2%").
 
-- **Output:** Zapisuje wynikowy JSON w `data/receipts_archive` oraz aktualizuje lokalny cache.
+- **Output:** Zapisuje dane w tabeli `expenses` (PostgreSQL) ze statusem `verified=false` oraz aktualizuje lokalny cache.
 
 ### 3.5 Brain CLI (`brain.py`)
 Centralny interfejs zarządzania systemem w terminalu.
@@ -138,7 +145,20 @@ Interfejs konwersacyjny z własną bazą wiedzy.
 Zestaw narzędzi administracyjnych i operacyjnych.
 - **Migracja:** `migrate_notes.py` kopiuje i waliduje dane ze starego Vaulta.
 - **Health Check:** `health_check.py` sprawdza dostępność wszystkich serwisów (Postgres, Redis, Ollama, Qdrant).
-- **Dashboard:** Aplikacja Streamlit (`scripts/monitoring/dashboard.py`) wizualizująca stan kolejek i systemu w czasie rzeczywistym.
+- **Dashboard (Streamlit):**
+  - **Overview & Queues**: Monitoring stanu kontenerów i kolejek Redis.
+  - **Expenses Analytics**: Wizualizacja zatwierdzonych wydatków.
+  - **Human In The Loop**: Interfejs do ręcznej weryfikacji i edycji nowo wprowadzonych paragonów przed ich zatwierdzeniem. Zatwierdzenie wyzwala aktualizację Agenta 09 (Pantry).
+
+### 3.7 Pantry Service (`modules/pantry/`) - Agent 09
+Inteligentny agent zarządzający zapasami domowymi.
+- **Architektura:** Ledger-based (księgowa). Stan produktu nie jest zapisany jako jedna liczba, lecz wynika z agregacji transakcji.
+- **Główne funkcje:**
+  - `process_receipt`: Pobiera dane z zatwierdzonego paragonu i dodaje "zakupy" do rejestru.
+  - `consume_product`: Rejestruje zużycie produktu (np. wykorzystanie w kuchni).
+  - `adjust_stock`: Synchronizuje stan wirtualny z rzeczywistym (inwentaryzacja) poprzez transakcję korygującą.
+- **Deduplikacja:** Wykorzystuje hash SHA256 (data + sklep + kwota), aby zapobiec duplikatom produktów z tego samego paragonu.
+- **Output:** Automatycznie regeneruje pliki `Spiżarnia.md` oraz `Lista Zakupów.md` w Obsidianie.
 
 ---
 
@@ -179,6 +199,30 @@ Zestaw narzędzi administracyjnych i operacyjnych.
 - `items`: JSON (lista produktów)
 - `verified`: Boolean (czy zatwierdzone przez człowieka)
 - `ocr_raw_text`: Text
+
+**Tabela: `pantry_produkty`**
+- `id`: Integer (PK)
+- `nazwa`: String (Unique)
+- `kategoria`: String
+- `minimum_ilosc`: Numeric (Próg dla listy zakupów)
+- `jednostka_miary`: String
+
+**Tabela: `pantry_paragony`**
+- `id`: Integer (PK)
+- `hash_identyfikacyjny`: String (Unique, SHA256)
+- `data_zakupow`: Date
+
+**Tabela: `pantry_pozycje_paragonu` (Ledger: IN)**
+- `id`: Integer (PK)
+- `paragon_id`: FK(pantry_paragony)
+- `produkt_id`: FK(pantry_produkty)
+- `ilosc`: Numeric
+
+**Tabela: `pantry_posilki` (Ledger: OUT)**
+- `id`: Integer (PK)
+- `produkt_id`: FK(pantry_produkty)
+- `ilosc`: Numeric
+- `data`: Date
 
 ---
 

@@ -56,7 +56,7 @@ Masz dwie opcje:
 **Opcja 1: Drag & Drop**
 1. Skopiuj zdjęcie paragonu (`.jpg` lub `.png`) do folderu `00_Inbox`.
 2. System wykryje plik graficzny i automatycznie go przetworzy.
-3. Wynik (plik JSON) zostanie zapisany w `data/receipts_archive`.
+3. Wynik zostanie zapisany w bazie danych PostgreSQL ze statusem **"Oczekujący na weryfikację"**.
 
 **Opcja 2: Brain CLI**
 Jeśli masz paragon gdzieś indziej na dysku, użyj komendy:
@@ -66,12 +66,46 @@ python brain.py finance /ścieżka/do/paragonu.jpg
 
 System użyje OCR oraz Sztucznej Inteligencji (LLM), aby „przeczytać” Twój paragon i zapisać wydatki. 
 
+### 👨‍💻 3.1 Weryfikacja Danych (Human In The Loop)
+
+System zapisał dane w bazie, ale wymagają one Twojego zatwierdzenia:
+1.  Uruchom/Otwórz **Dashboard Monitorujący**.
+2.  Przejdź do zakładki **"Human In The Loop"**.
+    *   Tutaj zobaczysz wszystkie nowo przetworzone paragony.
+    *   Możesz poprawić nazwę sklepu, kwotę lub datę, jeśli system popełnił błąd.
+3.  Kliknij **"Approve & Save"**.
+4.  Zatwierdzony wydatek od razu pojawi się w statystykach w zakładce **"Expenses Analytics"**.
+
 > [!TIP]
 > **System uczy się Twoich zakupów!** Dzięki funkcji "Async Receipt Pipeline", system zapamiętuje produkty i sklepy. Przy kolejnych zakupach tych samych produktów przetwarzanie będzie błyskawiczne (nawet 5x szybciej), ponieważ system nie będzie musiał pytać Sztucznej Inteligencji o każdy produkt z osobna.
 
 ---
 
-## 💬 4. Czat z Twoją Wiedzą (RAG)
+## 📦 4. Inteligentna Spiżarnia (Pantry)
+
+System automatycznie zarządza Twoimi zapasami domowymi na podstawie zatwierdzonych paragonów.
+
+### Jak to działa?
+1.  **Zakupy:** Gdy zatwierdzisz paragon w zakładce "Human In The Loop", produkty z tego paragonu automatycznie "lądują" w Twojej wirtualnej spiżarni.
+2.  **Zużycie:** Gdy zużyjesz produkt (np. wypijesz mleko), możesz to odnotować, aby system wiedział, że zapas się zmniejszył.
+3.  **Lista Zakupów:** Jeśli stan produktu spadnie poniżej ustalonego minimum, system automatycznie doda go do pliku `Lista Zakupów.md` w Twoim Obsidianie.
+
+### Jak odnotować zużycie? (Brain CLI)
+Użyj terminala, aby szybko zapisać, co zostało zużyte:
+```bash
+# Formuła: python brain.py pantry consume "Nazwa Produktu" Ilość
+python brain.py pantry consume "Mleko" 1.0
+```
+
+### Podgląd stanu
+Możesz sprawdzić stan spiżarni na dwa sposoby:
+1.  **W Obsidianie:** Otwórz plik `Zasoby/Spiżarnia.md`. Jest on automatycznie odświeżany po każdym zakupie i zużyciu.
+2.  **W Dashboardzie:** Przejdź do zakładki **"Pantry"** w przeglądarce.
+3.  **W Terminalu:** Wpisz `python brain.py pantry status`.
+
+---
+
+## 💬 5. Czat z Twoją Wiedzą (RAG)
 
 Możesz rozmawiać ze swoimi notatkami tak jak z ChatGPT.
 
@@ -89,14 +123,14 @@ AI przeszuka Twoje notatki, znajdzie odpowiednie fragmenty i odpowie na bazie Tw
 
 ---
 
-## 🗃️ 5. Migracja Danych
+## 🗃️ 6. Migracja Danych
 Jeśli przenosisz się ze starego systemu, przygotowaliśmy specjalny poradnik migracji.
 👉 **[Instrukcja Migracji](MIGRATION_GUIDE.md)**
 Znajdziesz tam informacje jak przenieść swoje stare notatki i paragony do nowego systemu.
 
 ---
 
-## 🛠️ 6. Rozwiązywanie Problemów
+## 🛠️ 7. Rozwiązywanie Problemów
 
 **Nic się nie dzieje po wrzuceniu linku?**
 1. Sprawdź, czy Docker działa.
