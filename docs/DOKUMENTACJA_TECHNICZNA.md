@@ -13,6 +13,13 @@
 - **Prywatność:** Wszystkie dane i modele AI działają lokalnie (Docker).
 - **Skalowalność:** Komunikacja asynchroniczna przez Redis Queue.
 - **Odporność:** Błędy w jednym module nie zatrzymują całego systemu.
+- **Czystość Prezentacji:** Obsidian służy wyłącznie jako warstwa prezentacji danych i ich pasywnego przeglądania. Cała logika (backend, dashboardy aktywne) znajduje się w kontenerach Docker (Streamlit, CLI).
+
+### Filozofia Projektowa: "Obsidian as Presentation Layer"
+System został zaprojektowany tak, aby minimalizować obciążenie aplikacji Obsidian. 
+- **Brak skryptów wewnątrz notatek:** Nie używamy wtyczek takich jak Dataview czy Templater do wykonywania logiki "w locie". 
+- **Pre-rendering:** Wszystkie zestawienia (np. Spiżarnia, Lista Zakupów) są generowane po stronie backendu jako czyste pliki Markdown i zapisywane do Vaulta.
+- **Interakcja:** Zarządzanie systemem (HITL, monitoring) odbywa się przez dedykowane interfejsy zewnętrzne (Streamlit na porcie 8501, CLI).
 
 ---
 

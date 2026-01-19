@@ -8,6 +8,12 @@ Ten system pomaga Ci automatycznie zbierać, przetwarzać i wykorzystywać wiedz
 
 ## 🚀 1. Szybki Start
 
+### Filozofia: Obsidian to Twoja Czytelnia
+Ten system różni się od wielu wtyczek do Obsidianu tym, że **nie obciąża aplikacji ciężkimi skryptami**. 
+- **Logika i Przetwarzanie**: Odbywa się w tle (Docker).
+- **Zasoby w Obsidianie**: To czyste, statyczne pliki Markdown, które są niesamowicie szybkie w wyszukiwaniu i przeglądaniu.
+- **Zarządzanie**: Wszystkie akcje (np. zatwierdzanie paragonów) wykonujesz w wygodnym Dashboardzie w przeglądarce lub w terminalu.
+
 ### Włączanie Systemu
 Aby uruchomić system (jeśli został zainstalowany):
 1. Otwórz terminal w folderze projektu.

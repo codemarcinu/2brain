@@ -14,6 +14,15 @@ A microservices-based system for automating your Second Brain in Obsidian. Trans
 - **👁️ Human In The Loop**: Streamlit dashboard for verifying and approving extracted financial data.
 - **📦 Intelligent Pantry**: Ledger-based inventory management (Agent 09) integrated with receipt processing.
 - **🧠 Brain CLI**: Terminal Dashboard for status monitoring and management.
+- **🏗️ Obsidian as Presentation Layer**: All logic and data processing happens in Docker; Obsidian remains a static, high-performance viewing and storage tool.
+
+## 🏛️ Core Philosophy
+
+**Obsidian Brain v2** follows the principle of **Separation of Concerns**:
+1.  **Backend (Docker)**: Collector, Refinery, Finance, and Pantry services handle all data ingestion, OCR, AI processing, and database management.
+2.  **Active UI**: The **Streamlit Dashboard** (port 8501) and **Brain CLI** are the primary tools for system management, data verification (HITL), and analytics.
+3.  **Presentation (Obsidian)**: Your vault acts as a high-fidelity, searchable reading room. All summaries, pantry statuses, and shopping lists are pre-rendered as clean Markdown by the backend. No heavy plugins (like Dataview or Templater) are required for core functionality.
+
 
 ## 🏗️ Architecture
 
