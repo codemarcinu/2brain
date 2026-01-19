@@ -7,6 +7,8 @@ data/postgres/*
 data/qdrant/*
 data/ollama/*
 data/open-webui/*
+data/vault/*
+data/inbox/*
 !data/redis/.gitkeep
 !data/postgres/.gitkeep
 !data/qdrant/.gitkeep
