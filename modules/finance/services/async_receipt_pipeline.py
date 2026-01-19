@@ -12,10 +12,10 @@ from rapidfuzz import process, fuzz
 
 from shared.logging import get_logger
 from config import config
-from modules.finance.utils.receipt_cache import ReceiptCache, ProductMatch
-from modules.finance.utils.taxonomy import TaxonomyGuard
-from modules.finance.adapters.llm_adapter import LLMAdapter
-from modules.finance.utils.receipt_agents import detect_shop, get_agent
+from utils.receipt_cache import ReceiptCache, ProductMatch
+from utils.taxonomy import TaxonomyGuard
+from adapters.llm_adapter import LLMAdapter
+from utils.receipt_agents import detect_shop, get_agent
 
 logger = get_logger("AsyncReceiptPipeline")
 
