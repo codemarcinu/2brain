@@ -7,9 +7,9 @@ A microservices-based system for automating your Second Brain in Obsidian. Trans
 **Obsidian Brain v2** refactors a monolithic script into a robust, scalable architecture powered by Docker and Local LLMs (Ollama).
 
 **Key Features:**
-- **📥 Universal Collector**: Automatically downloads and processes content from YouTube, Articles, and **Receipts**.
+- **📥 Universal Collector**: Automatically downloads and processes content from YouTube, Articles, **Receipts**, and **Google Drive**.
 - **🤖 AI Refinery**: Processes raw content into structured Markdown notes.
-- **💰 Finance Tracker**: Optimized **Async Receipt Pipeline** for ultra-fast OCR and data extraction using caching and fuzzy matching.
+- **💰 Finance Tracker**: Optimized **Async Receipt Pipeline** for ultra-fast OCR (using **Google Vision API**) and data extraction using **OpenAI Nano** models.
 - **💬 AI Chat (RAG)**: Chat with your knowledge base using Open Web UI.
 - **👁️ Human In The Loop**: Streamlit dashboard for verifying and approving extracted financial data.
 - **📦 Intelligent Pantry**: Ledger-based inventory management (Agent 09) integrated with receipt processing.

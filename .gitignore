@@ -1,6 +1,11 @@
 # Environment
 .env
 
+# Google Credentials
+credentials.json
+gcp_key.json
+token.json
+
 # Data volumes
 data/redis/*
 data/postgres/*

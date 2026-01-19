@@ -11,5 +11,10 @@ lxml_html_clean>=0.1.0
 # File watching
 watchdog>=4.0.0
 
+# Google Services
+google-api-python-client>=2.0.0
+google-auth-httplib2>=0.1.0
+google-auth-oauthlib>=1.0.0
+
 # Utilities
 python-dotenv>=1.0.0

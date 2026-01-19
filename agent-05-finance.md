@@ -133,14 +133,14 @@ class FinanceConfig:
         self.receipts_folder = Path("/inbox/receipts")  # Mounted volume
         self.temp_uploads = Path("/tmp/finance_uploads")
         
-        # OCR Settings
-        self.ocr_language = "pol+eng"  # Tesseract language
-        self.ocr_dpi = 300  # Target DPI for preprocessing
+        # LLM Settings (OpenAI Nano lub DeepSeek)
+        self.ai_provider = self.base.ai_provider # "openai" lub "ollama"
+        self.llm_model = self.base.openai_model # np. "gpt-5-nano"
+        self.llm_api_key = self.base.openai_api_key
         
-        # LLM Settings (DeepSeek dla structured parsing)
-        self.llm_api_key = self.base.deepseek_api_key or self.base.openai_api_key
-        self.llm_model = "deepseek-chat"  # lub gpt-4o-mini
-        self.llm_base_url = "https://api.deepseek.com"  # lub OpenAI
+        # OCR Settings
+        self.ocr_provider = self.base.ocr_provider # "google_vision" lub "tesseract"
+        self.ocr_language = "pol+eng"  # Tesseract language
         
         # Database
         self.database_url = self.base.postgres_url
@@ -232,7 +232,7 @@ class Expense(Base):
 
 ```python
 """
-OCR Engine using Tesseract
+OCR Engine using Google Vision API (primary) or Tesseract (fallback)
 """
 import pytesseract
 from PIL import Image, ImageEnhance, ImageFilter

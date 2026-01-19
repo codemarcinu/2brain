@@ -10,7 +10,7 @@ Mikroserwis pobierający treści z YouTube i stron WWW
 
 Collector to pierwszy punkt kontaktu z zewnętrznymi danymi. Ten serwis:
 - **Obserwuje** folder `00_Inbox/` (watchdog)
-- **Pobiera** treści z linków (YouTube audio, artykuły web)
+- **Pobiera** treści z linków (YouTube audio, artykuły web) oraz **Google Drive**
 - **Wysyła** surowe dane do kolejki Redis dla Refinery
 - **NIE przetwarza** treści AI - jest "głupim" robotem do brudnej roboty
 
@@ -143,6 +143,11 @@ class CollectorConfig:
         
         # Redis queues
         self.output_queue = "queue:refinery"
+        
+        # Google Drive settings
+        self.google_drive_inbox_id = self.base.google_drive_inbox_id
+        self.google_drive_credentials = self.base.google_drive_credentials
+        self.google_drive_token = self.base.google_drive_token
         
         # Ensure paths exist
         self.temp_download_path.mkdir(parents=True, exist_ok=True)

@@ -5,6 +5,7 @@ import time
 import signal
 import sys
 import json
+import os
 from pathlib import Path
 from urllib.parse import urlparse
 from shared.messaging import TaskQueue
@@ -16,6 +17,7 @@ from services.youtube_downloader import YouTubeDownloader
 from services.transcriber import Transcriber
 from services.web_scraper import WebScraper
 from utils.file_watcher import InboxWatcher
+from services.google_drive import GoogleDriveService
 
 
 # Setup logging
@@ -42,6 +44,19 @@ class CollectorService:
         )
         self.scraper = WebScraper(timeout=config.web_timeout_seconds)
         
+        # Initialize Google Drive if configured
+        self.gdrive = None
+        if config.base.google_drive_inbox_id and os.path.exists(config.base.google_drive_credentials):
+            try:
+                self.gdrive = GoogleDriveService(
+                    credentials_path=config.base.google_drive_credentials,
+                    token_path=config.base.google_drive_token,
+                    folder_id=config.base.google_drive_inbox_id
+                )
+                logger.info("google_drive_service_initialized", folder_id=config.base.google_drive_inbox_id)
+            except Exception as e:
+                logger.error("google_drive_init_failed", error=str(e))
+
         logger.info("collector_service_initialized")
     
     def is_youtube_url(self, url: str) -> bool:
@@ -207,6 +222,33 @@ class CollectorService:
         else:
             logger.error("article_task_send_failed", task_id=task.id)
 
+    def poll_google_drive(self):
+        """Poll Google Drive for new files"""
+        if not self.gdrive:
+            return
+
+        files = self.gdrive.list_new_files()
+        if not files:
+            return
+
+        logger.info("google_drive_files_found", count=len(files))
+        for file_info in files:
+            file_id = file_info['id']
+            file_name = file_info['name']
+            
+            # Local path in inbox
+            local_path = config.inbox_path / file_name
+            
+            logger.info("downloading_from_gdrive", name=file_name, id=file_id)
+            if self.gdrive.download_file(file_id, local_path):
+                # Process the file using existing logic
+                # Note: InboxWatcher will also pick it up, but we can call it directly to be sure and delete from GDrive
+                self.process_file(local_path)
+                
+                # After successful processing (sent to queue), delete from Drive
+                self.gdrive.delete_file(file_id)
+                logger.info("gdrive_file_processed_and_deleted", name=file_name)
+
 
 def main():
     """Main loop"""
@@ -235,8 +277,16 @@ def main():
         signal.signal(signal.SIGTERM, signal_handler)
         signal.signal(signal.SIGINT, signal_handler)
         
-        # Keep alive
+        # Keep alive & Poll Google Drive
+        last_gdrive_poll = 0
+        poll_interval = 60 # 1 minute
+        
         while True:
+            current_time = time.time()
+            if current_time - last_gdrive_poll > poll_interval:
+                service.poll_google_drive()
+                last_gdrive_poll = current_time
+                
             time.sleep(1)
             
     except Exception as e:

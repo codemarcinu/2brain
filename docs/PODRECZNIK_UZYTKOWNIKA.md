@@ -44,6 +44,12 @@ Znalazłeś ciekawy artykuł?
 3. Wklej link.
 4. **Gotowe!** Notatka pojawi się w folderze `Articles`.
 
+#### Google Drive ☁️
+Masz pliki na dysku Google?
+1. Wrzuć plik (zdjęcie paragonu) do folderu na Google Drive o ID `1SzA0IQuKIvVF2lpUMwH00vpPQXD2PK0P`.
+2. System co minutę sprawdza ten folder, pobiera nowe pliki i usuwa je z Drive po udanym pobraniu.
+3. Treść trafi do modułu Finanse do przetworzenia.
+
 ---
 
 ## 💰 3. Finanse i Paragony
@@ -64,7 +70,7 @@ Jeśli masz paragon gdzieś indziej na dysku, użyj komendy:
 python brain.py finance /ścieżka/do/paragonu.jpg
 ```
 
-System użyje OCR oraz Sztucznej Inteligencji (LLM), aby „przeczytać” Twój paragon i zapisać wydatki. 
+System użyje **Google Vision API** (najwyższa jakość) lub Tesseract oraz Sztucznej Inteligencji (LLM **OpenAI Nano**), aby „przeczytać” Twój paragon i zapisać wydatki. 
 
 ### 👨‍💻 3.1 Weryfikacja Danych (Human In The Loop)
 

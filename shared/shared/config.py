@@ -40,6 +40,17 @@ class Settings(BaseSettings):
     gemini_api_key: str = ""
     deepseek_api_key: str = ""
     
+    # AI & OCR Providers
+    ai_provider: str = "ollama"  # ollama | openai
+    openai_model: str = "gpt-4o-mini"
+    ocr_provider: str = "tesseract"  # tesseract | google_vision
+    
+    # Google Services
+    google_application_credentials: str = "/app/gcp_key.json"
+    google_drive_credentials: str = "/app/credentials.json"
+    google_drive_token: str = "/app/token.json"
+    google_drive_inbox_id: str = ""
+    
     # Paths
     obsidian_vault_path: str = "/vault"
     inbox_path: str = "/inbox"

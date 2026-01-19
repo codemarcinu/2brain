@@ -21,7 +21,12 @@ class FinanceConfig:
         self.ocr_lang = "pol+eng"
         
         # LLM
-        self.llm_model = "deepseek-r1:14b" # Fallback model
+        self.llm_model = self.base.ollama_model # Fallback model
+        
+        # AI & OCR Providers
+        self.receipt_ai_provider = self.base.ai_provider
+        self.openai_receipt_model = self.base.openai_model
+        self.ocr_provider = self.base.ocr_provider
         
         # Cache
         self.product_cache_path = Path("./data/product_cache.json")
@@ -29,9 +34,8 @@ class FinanceConfig:
         # Create dirs
         self.receipts_archive_path.mkdir(parents=True, exist_ok=True)
 
-        # AI Provider
-        self.receipt_ai_provider = "ollama"
-        self.ollama_receipt_model = "deepseek-r1:14b"
+        # AI Provider settings (compatibility with old code if any)
+        self.ollama_receipt_model = self.base.ollama_model
         
         # Taxonomy & Cache
         self.taxonomy_path = Path(__file__).parent / "config" / "product_taxonomy.json"

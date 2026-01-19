@@ -124,10 +124,15 @@ services:
     volumes:
       - ${INBOX_PATH}:/inbox
       - ./shared:/shared
+      - ./credentials.json:/app/credentials.json
+      - ./token.json:/app/token.json
     environment:
       - LOG_LEVEL=${LOG_LEVEL:-DEBUG}
       - REDIS_HOST=redis
       - INBOX_PATH=/inbox
+      - GOOGLE_DRIVE_INBOX_ID=${GOOGLE_DRIVE_INBOX_ID}
+      - GOOGLE_DRIVE_CREDENTIALS=/app/credentials.json
+      - GOOGLE_DRIVE_TOKEN=/app/token.json
     command: sh -c "pip install -e /shared && python main.py"
     depends_on:
       redis:
@@ -175,12 +180,18 @@ services:
       - ${INBOX_PATH}:/inbox
       - ./data/product_cache.json:/app/data/product_cache.json
       - ./shared:/shared
+      - ./gcp_key.json:/app/gcp_key.json
     command: sh -c "pip install -e /shared && python main.py"
     environment:
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
       - REDIS_HOST=redis
       - INBOX_PATH=/inbox
       - OLLAMA_HOST=http://ollama:11434
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/gcp_key.json
+      - AI_PROVIDER=${AI_PROVIDER}
+      - OPENAI_MODEL=${OPENAI_MODEL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OCR_PROVIDER=${OCR_PROVIDER}
     depends_on:
       redis:
         condition: service_healthy

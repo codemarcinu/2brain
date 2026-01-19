@@ -8,6 +8,7 @@ rapidfuzz>=3.0.0
 
 # AI / LLM
 openai>=1.0.0  # Common interface for Ollama/DeepSeek
+google-cloud-vision>=3.4.0
 
 # Shared
 # obsidian-brain-shared @ file:///shared

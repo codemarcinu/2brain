@@ -102,6 +102,7 @@ Biblioteka współdzielona przez wszystkie serwisy Python. Zapewnia spójność 
   - **YouTube:** Pobiera audio, transkrybuje (Whisper).
   - **Artykuły:** Pobiera treść (Trafilatura).
   - **Paragony:** Wykrywa obrazy (`.jpg`, `.png`) i przesyła do Finance.
+  - **Google Drive:** Polling folderu Google Drive, pobieranie nowych plików i cleanup.
 - **Output:** Wysyła zadania do `queue:refinery` lub `queue:finance`.
 
 ### 3.3 Refinery Service (`modules/refinery/`)
@@ -121,7 +122,8 @@ Serwis do przetwarzania paragonów (Headless) zoptymalizowany pod kątem szybko�
 System działa w modelu kaskadowym (waterfall) w celu minimalizacji użycia LLM:
 1.  **Warstwa 1 (Cache):** Sprawdza `ReceiptCache` (dokładne dopasowanie, LRU, wzorce sklepowe). Jeśli linia tekstu była już widziana, zwraca dane natychmiast.
 2.  **Warstwa 2 (Fuzzy Matching):** Równoległe dopasowywanie rozmyte (`rapidfuzz`) do znanej taksonomii produktów (`product_taxonomy.json`). Wykorzystuje `ThreadPoolExecutor`.
-3.  **Warstwa 3 (AI Fallback):** Asynchroniczne wywołanie LLM (DeepSeek-R1) tylko gdy "pokrycie" paragonu jest niskie (<30%).
+3.  **Warstwa 3 (AI Fallback):** Asynchroniczne wywołanie LLM (**OpenAI Nano** Gpt-5-nano / Gpt-4.1-mini) tylko gdy "pokrycie" paragonu jest niskie (<30%).
+4.  **OCR Provider:** Dynamiczny wybór między **Google Vision API** (rekomendowane) a Tesseractem.
 4.  **Normalizacja:** `TaxonomyGuard` dba o spójność nazw, kategorii i jednostek (np. "MLEKO UHT" -> "Mleko 3.2%").
 
 - **Output:** Zapisuje dane w tabeli `expenses` (PostgreSQL) ze statusem `verified=false` oraz aktualizuje lokalny cache.

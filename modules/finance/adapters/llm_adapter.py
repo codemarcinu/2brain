@@ -12,10 +12,17 @@ class LLMAdapter:
     """
     
     def __init__(self):
-        self.client = AsyncOpenAI(
-            base_url=f"{config.base.ollama_host}/v1",
-            api_key="ollama"
-        )
+        if config.receipt_ai_provider == "openai":
+            self.client = AsyncOpenAI(
+                api_key=config.base.openai_api_key
+            )
+            logger.info("llm_adapter_openai_initialized", model=config.openai_receipt_model)
+        else:
+            self.client = AsyncOpenAI(
+                base_url=f"{config.base.ollama_host}/v1",
+                api_key="ollama"
+            )
+            logger.info("llm_adapter_ollama_initialized", model=config.ollama_receipt_model)
         
     async def generate_content_async(
         self, 
@@ -27,7 +34,12 @@ class LLMAdapter:
         """
         Generate content using AsyncOpenAI.
         """
-        model = model_name or config.ollama_receipt_model
+        if model_name:
+            model = model_name
+        elif config.receipt_ai_provider == "openai":
+            model = config.openai_receipt_model
+        else:
+            model = config.ollama_receipt_model
         
         try:
             messages = [
