@@ -41,9 +41,14 @@ class TestFullPipeline:
         Test: Link YouTube → Collector → Redis → Refinery → Vault
         """
         # 1. Wrzuć link do Inbox
-        test_link = "https://www.youtube.com/watch?v=jNQXAC9IVRw" # Me at the zoo
-        test_file = inbox_path / "test_youtube.txt"
+        unique_token = f"test_{int(time.time())}"
+        test_link = f"https://www.youtube.com/watch?v=jNQXAC9IVRw&test={unique_token}" # Me at the zoo
+        test_file = inbox_path / f"test_youtube_{unique_token}.txt"
         
+        youtube_folder = vault_path / "YouTube"
+        youtube_folder.mkdir(parents=True, exist_ok=True)
+        initial_count = len(list(youtube_folder.glob("*.md")))
+
         with open(test_file, 'w') as f:
             f.write(test_link)
     
@@ -57,11 +62,10 @@ class TestFullPipeline:
         while time.time() - start_time < 120: # Increased from 60 to 120 seconds
             queue_len = redis.get_queue_length("queue:refinery")
             
-            # Check if note was created (fast path)
-            youtube_folder = vault_path / "YouTube"
-            if youtube_folder.exists() and list(youtube_folder.glob("*.md")):
-                 task_found = True
-                 break
+            # Check if note was created (fast path: count increased)
+            if len(list(youtube_folder.glob("*.md"))) > initial_count:
+                task_found = True
+                break
 
             if queue_len > 0:
                 task_found = True
@@ -74,13 +78,10 @@ class TestFullPipeline:
         note_created = False
         
         while time.time() - start_time < 120:
-            # Check if note was created (search for today's date in filename)
-            youtube_folder = vault_path / "YouTube"
-            if youtube_folder.exists():
-                notes = list(youtube_folder.glob("*.md"))
-                if notes:
-                    note_created = True
-                    break
+            # Check if note was created (search for count increase)
+            if len(list(youtube_folder.glob("*.md"))) > initial_count:
+                note_created = True
+                break
             time.sleep(5)
         
         assert note_created, "Note not created in Vault after 120s"
@@ -92,9 +93,14 @@ class TestFullPipeline:
         """
         Test: Link WWW → Collector → Redis → Refinery → Vault
         """
-        test_link = "https://en.wikipedia.org/wiki/Artificial_intelligence"
-        test_file = inbox_path / "test_article.txt"
+        unique_token = f"test_{int(time.time())}"
+        test_link = f"https://en.wikipedia.org/wiki/Artificial_intelligence?test={unique_token}"
+        test_file = inbox_path / f"test_article_{unique_token}.txt"
         
+        articles_folder = vault_path / "Articles"
+        articles_folder.mkdir(parents=True, exist_ok=True)
+        initial_count = len(list(articles_folder.glob("*.md")))
+
         with open(test_file, 'w') as f:
             f.write(test_link)
         
@@ -103,18 +109,18 @@ class TestFullPipeline:
         while time.time() - start_time < 120: # Increased from 60 to 120 seconds
             if redis.get_queue_length("queue:refinery") > 0:
                 break
+            # Or if file already created
+            if len(list(articles_folder.glob("*.md"))) > initial_count:
+                break
             time.sleep(2)
         
         # Wait for Refinery
         start_time = time.time()
         while time.time() - start_time < 120:
-            articles_folder = vault_path / "Articles"
-            if articles_folder.exists():
-                notes = list(articles_folder.glob("*.md"))
-                if notes:
-                    # Success
-                    test_file.unlink(missing_ok=True)
-                    return
+            if len(list(articles_folder.glob("*.md"))) > initial_count:
+                # Success
+                test_file.unlink(missing_ok=True)
+                return
             time.sleep(5)
         
         pytest.fail("Article note not created in time")
