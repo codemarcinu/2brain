@@ -1,4 +1,4 @@
 qdrant-client
 langchain-community
 langchain-ollama
-pydantic
+pydantic>=2.7.0,<2.10.0
