@@ -30,9 +30,9 @@ def main():
     # Initialize Redis
     try:
         r = redis.Redis(
-            host=config.base.redis_host,
-            port=config.base.redis_port,
-            db=config.base.redis_db,
+            host=settings.redis_host,
+            port=settings.redis_port,
+            db=settings.redis_db,
             decode_responses=True
         )
         r.ping()

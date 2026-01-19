@@ -1,12 +1,15 @@
-import logging
 import json
+import hashlib
 from pathlib import Path
-from typing import Optional, Dict, List, Any
+from datetime import datetime
+from typing import Optional, Dict, List
 from dataclasses import dataclass, asdict
 from collections import OrderedDict
+from pydantic import BaseModel
+from shared.logging import get_logger
 from config import config
 
-logger = logging.getLogger("ReceiptCache")
+logger = get_logger("ReceiptCache")
 
 @dataclass
 class ProductMatch:

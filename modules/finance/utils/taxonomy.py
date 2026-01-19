@@ -1,11 +1,11 @@
 import json
-import logging
 from pathlib import Path
 from typing import Tuple, Dict, Optional, Any
 from rapidfuzz import process, fuzz
 from config import config
+from shared.logging import get_logger
 
-logger = logging.getLogger("TaxonomyGuard")
+logger = get_logger("TaxonomyGuard")
 
 class TaxonomyGuard:
     ALLOWED_UNITS = {"szt", "kg", "g", "l", "ml", "opakowanie"}

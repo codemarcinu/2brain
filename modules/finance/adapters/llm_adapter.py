@@ -1,9 +1,9 @@
-import logging
 import asyncio
 from openai import AsyncOpenAI
 from config import config
+from shared.logging import get_logger
 
-logger = logging.getLogger("LLMAdapter")
+logger = get_logger("LLMAdapter")
 
 class LLMAdapter:
     """
