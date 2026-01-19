@@ -18,7 +18,7 @@ The Finance module now implements a multi-stage, high-performance processing pip
 3.  **Stage 3: Async AI Fallback** - Calls a Local LLM (DeepSeek-R1) via `LLMAdapter` only when coverage is low (<30%).
 4.  **Stage 4: Taxonomy Guard** - Normalizes names, categories, and units for data consistency across the system.
 
-### 🏗️ Advanced Architecture
+### 🏗️ Advanced Architecture (Updated)
 
 ```mermaid
 graph TD
@@ -32,27 +32,32 @@ graph TD
     F --> H[Update Cache]
     H --> G
     C --> G
-    G --> I[Save Receipt JSON]
+    G --> I[Save to Postgres - Verified: False]
+    I --> J[Human In The Loop - Dashboard]
+    J -- Approve --> K[Final DB Entry - Verified: True]
 ```
 
 ## ✅ Tasks Completed
 
 ### 1. Finance Module (Backend)
 - **Path**: `modules/finance/`
-- **Tech**: Python, OCR (Tesseract), LLM (Ollama/DeepSeek), Redis, `rapidfuzz`.
+- **Tech**: Python, OCR (Tesseract), LLM (Ollama/DeepSeek), Redis, `psycopg2`.
 - **Function**:
   - Consumes tasks from `queue:finance`.
   - Performs OCR and executes the **Async Receipt Pipeline**.
-  - Saves results to `data/receipts_archive`.
+  - Inserts results into **PostgreSQL** (`psql01.mikr.us`) with `verified=false`.
 
 ### 2. Collector Updates
 - **Path**: `modules/collector/`
 - **Change**: Updated `file_watcher.py` to route image files to `queue:finance`.
 
-### 3. Brain CLI (Frontend)
-- **File**: `brain.py` (Project Root)
-- **Tech**: `Rich`, `Typer`.
-- **Features**: Dashboard, receipt ingestion helper.
+### 3. Brain CLI & Dashboard (Frontend)
+- **File**: `brain.py` (CLI), `scripts/monitoring/dashboard.py` (Streamlit).
+- **Tech**: `Rich`, `Streamlit`.
+- **Features**: 
+  - **Dashboard**: Real-time system monitoring.
+  - **HITL Tab**: Interface for humans to review, edit, and approve expenses.
+  - **CLI**: `status` and `finance` helpers.
 
 ## 📋 Usage
 
@@ -80,5 +85,13 @@ python brain.py finance receipts/lunch.jpg
 - `brain.py`
 - `requirements-cli.txt`
 
+## 🔗 Google Drive Integration
+
+To sync your Google Drive with the system:
+1.  **Install Google Drive for Desktop** on your host machine.
+2.  **Mount the Drive**: Note the path (e.g., `G:\My Drive\Receipts`).
+3.  **WSL Integration**: Ensure the path is accessible in WSL (e.g., `/mnt/g/My Drive/Receipts`).
+4.  **Update `.env`**: Set `INBOX_PATH` to the WSL path of your Google Drive folder.
+
 ## 🔗 Dependencies
-- **Requires**: Agent 1 (Redis, Ollama), Agent 3 (Collector routing), `rapidfuzz`.
+- **Requires**: Agent 1 (Redis, Ollama), Agent 3 (Collector routing), PostgreSQL (External).
