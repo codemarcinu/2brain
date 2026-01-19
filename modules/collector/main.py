@@ -192,6 +192,7 @@ def main():
         watcher.start()
         
         logger.info("collector_service_ready", inbox_path=str(config.inbox_path))
+        logger.info("inbox_watcher_path_set", resolved_inbox_path=str(config.inbox_path))
         
         # Handle graceful shutdown
         def signal_handler(sig, frame):

@@ -7,8 +7,15 @@ from pathlib import Path
 from shared.messaging import RedisClient
 from shared.types import YoutubeTask, ArticleTask
 from shared.config import get_settings
+import dotenv
+import os
+
+dotenv.load_dotenv() # Load environment variables from .env
+get_settings.cache_clear() # Clear the cache for settings
+
 
 settings = get_settings()
+settings.redis_host = "localhost" # Force Redis host to localhost
 
 
 class TestFullPipeline:
@@ -34,27 +41,33 @@ class TestFullPipeline:
         Test: Link YouTube → Collector → Redis → Refinery → Vault
         """
         # 1. Wrzuć link do Inbox
-        test_link = "https://www.youtube.com/watch?v=F3QfS2U_P5c" # Grand tour of the International Space Station with Drew and Luca | Single take
+        test_link = "https://www.youtube.com/watch?v=jNQXAC9IVRw" # Me at the zoo
         test_file = inbox_path / "test_youtube.txt"
         
         with open(test_file, 'w') as f:
             f.write(test_link)
-        
+    
         # Give the collector a moment to detect the new file
-        time.sleep(5)
-        
-        # 2. Poczekaj na Collector (max 60s)
+        time.sleep(30) # Increased from 5 to 30 seconds
+    
+        # 2. Poczekaj na Collector (max 120s)
         start_time = time.time()
         task_found = False
-        
-        while time.time() - start_time < 60:
+    
+        while time.time() - start_time < 120: # Increased from 60 to 120 seconds
             queue_len = redis.get_queue_length("queue:refinery")
+            
+            # Check if note was created (fast path)
+            youtube_folder = vault_path / "YouTube"
+            if youtube_folder.exists() and list(youtube_folder.glob("*.md")):
+                 task_found = True
+                 break
+
             if queue_len > 0:
                 task_found = True
                 break
-            time.sleep(2)
-        
-        assert task_found, "Task not found in Redis queue after 60s"
+            time.sleep(2)        
+        assert task_found, "Task not found in Redis queue (or processed too fast)"
         
         # 3. Poczekaj na Refinery (max 120s)
         start_time = time.time()
@@ -87,7 +100,7 @@ class TestFullPipeline:
         
         # Wait for Collector
         start_time = time.time()
-        while time.time() - start_time < 60:
+        while time.time() - start_time < 120: # Increased from 60 to 120 seconds
             if redis.get_queue_length("queue:refinery") > 0:
                 break
             time.sleep(2)

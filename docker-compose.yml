@@ -15,7 +15,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - brain-network
+      - ai-stack
     restart: unless-stopped
 
   postgres:
@@ -35,7 +35,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - brain-network
+      - ai-stack
     restart: unless-stopped
 
   ollama:
@@ -60,7 +60,7 @@ services:
       timeout: 10s
       retries: 3
     networks:
-      - brain-network
+      - ai-stack
     restart: unless-stopped
 
   qdrant:
@@ -75,56 +75,44 @@ services:
       - QDRANT__SERVICE__HTTP_PORT=6333
       - QDRANT__SERVICE__GRPC_PORT=6334
     networks:
-      - brain-network
+      - ai-stack
     restart: unless-stopped
 
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
-    container_name: brain-chat
+    container_name: open-webui
+    restart: always
     ports:
       - "3000:8080"
+    environment:
+      # Użycie nazwy usługi wewnątrz sieci Docker
+      - OPENAI_API_BASE_URL=http://brain-pipelines:9099
+      - OPENAI_API_KEY=0p3n-w3bu!
     volumes:
       - ./data/open-webui:/app/backend/data
-      - ${OBSIDIAN_VAULT_PATH}:/vault:ro
-      - ./modules/chat/pipelines:/app/pipelines:ro
-    environment:
-      - OLLAMA_BASE_URL=http://ollama:11434
-      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
-      - ENABLE_RAG_WEB_SEARCH=false
-      - ENABLE_OLLAMA_API=true
-      - RAG_EMBEDDING_MODEL=nomic-embed-text:latest
-      - RAG_EMBEDDING_MODEL_TRUST_REMOTE_CODE=true
-      - CHUNK_SIZE=1000
-      - CHUNK_OVERLAP=100
-      - RAG_TOP_K=5
-      - VECTOR_DB=qdrant
-      - QDRANT_URL=http://qdrant:6333
-      - QDRANT_URI=http://qdrant:6333
-    depends_on:
-      ollama:
-        condition: service_healthy
-      qdrant:
-        condition: service_started
+      - ./custom_pipelines:/app/pipelines
     networks:
-      - brain-network
-    restart: unless-stopped
+      - ai-stack
+    depends_on:
+      - pipelines
 
   pipelines:
     image: ghcr.io/open-webui/pipelines:main
     container_name: brain-pipelines
+    restart: always
     ports:
       - "9099:9099"
-    volumes:
-      - ./modules/chat/pipelines:/app/pipelines
     environment:
-      - RESET_PIPELINES_DIR=false
-      - PIPELINES_REQUIREMENTS_PATH=/app/pipelines/requirements.txt
       - PIPELINES_API_KEY=0p3n-w3bu!
-      - CORS_ENABLED=true
-      - CORS_ORIGINS=http://localhost:3000,http://open-webui:8080
+      # KLUCZOWE: Włącza hot-reload w uvicorn
+      - PIPELINES_ENV=development
+      # Zapewnienie, że pip instaluje pakiety w miejscu dostępnym dla procesu
+      - PIPELINES_REQUIREMENTS_PATH=/app/pipelines/requirements.txt
+    volumes:
+      # Mapowanie lokalnego katalogu z kodem
+      - ./custom_pipelines:/app/pipelines
     networks:
-      - brain-network
-    restart: unless-stopped
+      - ai-stack
 
   # --- Agent Services ---
 
@@ -145,7 +133,7 @@ services:
       redis:
         condition: service_healthy
     networks:
-      - brain-network
+      - ai-stack
     restart: unless-stopped
 
   refinery:
@@ -161,6 +149,7 @@ services:
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
       - REDIS_HOST=redis
       - OLLAMA_HOST=http://ollama:11434
+      - OLLAMA_MODEL=llama3.2
       - OBSIDIAN_VAULT_PATH=/vault
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -174,7 +163,7 @@ services:
       ollama:
         condition: service_healthy
     networks:
-      - brain-network
+      - ai-stack
     restart: unless-stopped
 
   finance:
@@ -198,10 +187,12 @@ services:
       postgres:
         condition: service_healthy
     networks:
-      - brain-network
+      - ai-stack
     restart: unless-stopped
 
 networks:
-  brain-network:
+  ai-stack:
     driver: bridge
-    name: brain-network
+
+volumes:
+  open-webui:
