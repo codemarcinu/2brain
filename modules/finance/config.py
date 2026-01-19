@@ -29,4 +29,14 @@ class FinanceConfig:
         # Create dirs
         self.receipts_archive_path.mkdir(parents=True, exist_ok=True)
 
+        # AI Provider
+        self.receipt_ai_provider = "ollama"
+        self.ollama_receipt_model = "deepseek-r1:14b"
+        
+        # Taxonomy & Cache
+        self.taxonomy_path = Path(__file__).parent / "config" / "product_taxonomy.json"
+        
+        # Ensure config dir exists
+        self.taxonomy_path.parent.mkdir(parents=True, exist_ok=True)
+
 config = FinanceConfig()

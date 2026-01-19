@@ -4,6 +4,7 @@ Pillow>=10.0.0
 
 # Fuzzy Matching
 thefuzz[speedup]>=0.22.0
+rapidfuzz>=3.0.0
 
 # AI / LLM
 openai>=1.0.0  # Common interface for Ollama/DeepSeek

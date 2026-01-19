@@ -1,0 +1,92 @@
+{
+    "categories": {
+        "SPOŻYWCZE": [
+            "MLEKO",
+            "CHLEB",
+            "MASŁO",
+            "SER",
+            "JOGURT",
+            "WODA",
+            "SOK",
+            "NAPÓJ",
+            "KAWA",
+            "HERBATA",
+            "OWOCE",
+            "WARZYWA",
+            "MIĘSO",
+            "WĘDLINA",
+            "RYBA",
+            "PRZYPRAWY",
+            "SŁODYCZE",
+            "PRZEKĄSKI"
+        ],
+        "CHEMIA": [
+            "PROSZEK",
+            "PŁYN",
+            "MYDŁO",
+            "SZAMPON",
+            "PASTA",
+            "PAPIER",
+            "CHUSTECZKI",
+            "RĘCZNIK",
+            "GĄBKA",
+            "WORKI"
+        ],
+        "DOM": [
+            "MISKA",
+            "KUBEK",
+            "TALERZ",
+            "SZTUĆCE",
+            "GARNEK",
+            "PATELNIA",
+            "BATERIE",
+            "ŻARÓWKA"
+        ],
+        "ALKOHOL": [
+            "PIWO",
+            "WINO",
+            "WÓDKA",
+            "WHISKY",
+            "CIDER"
+        ],
+        "INNE": []
+    },
+    "mappings": [
+        {
+            "ocr": "MLEKO 3,2%",
+            "name": "Mleko 3.2%",
+            "cat": "SPOŻYWCZE",
+            "unit": "l"
+        },
+        {
+            "ocr": "MLEKO UHT 3,2",
+            "name": "Mleko 3.2%",
+            "cat": "SPOŻYWCZE",
+            "unit": "l"
+        },
+        {
+            "ocr": "MASLO EKSTRA",
+            "name": "Masło Ekstra",
+            "cat": "SPOŻYWCZE",
+            "unit": "szt"
+        },
+        {
+            "ocr": "CHLEB ZWYKLY",
+            "name": "Chleb Zwykły",
+            "cat": "SPOŻYWCZE",
+            "unit": "szt"
+        },
+        {
+            "ocr": "BULKA KAJZERKA",
+            "name": "Bułka Kajzerka",
+            "cat": "SPOŻYWCZE",
+            "unit": "szt"
+        },
+        {
+            "ocr": "REKLAMOWKA",
+            "name": "Torba Zakupowa",
+            "cat": "INNE",
+            "unit": "szt"
+        }
+    ]
+}
