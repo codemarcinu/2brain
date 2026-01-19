@@ -81,7 +81,14 @@ AI przeszuka Twoje notatki, znajdzie odpowiednie fragmenty i odpowie na bazie Tw
 
 ---
 
-## 🛠️ 5. Rozwiązywanie Problemów
+## 🗃️ 5. Migracja Danych
+Jeśli przenosisz się ze starego systemu, przygotowaliśmy specjalny poradnik migracji.
+👉 **[Instrukcja Migracji](MIGRATION_GUIDE.md)**
+Znajdziesz tam informacje jak przenieść swoje stare notatki i paragony do nowego systemu.
+
+---
+
+## 🛠️ 6. Rozwiązywanie Problemów
 
 **Nic się nie dzieje po wrzuceniu linku?**
 1. Sprawdź, czy Docker działa.

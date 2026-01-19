@@ -122,6 +122,12 @@ Interfejs konwersacyjny z własną bazą wiedzy.
   - **Indeksowanie:** Skrypt `setup_rag.py` przetwarza notatki Vault na wektory w Qdrant.
   - **Pipeline:** Przy każdym zapytaniu system wyszukuje 5 najbardziej relewantnych fragmentów notatek i dołącza je do promptu LLM.
 
+### 3.6 Migration & Monitoring (`scripts/`)
+Zestaw narzędzi administracyjnych i operacyjnych.
+- **Migracja:** `migrate_notes.py` kopiuje i waliduje dane ze starego Vaulta.
+- **Health Check:** `health_check.py` sprawdza dostępność wszystkich serwisów (Postgres, Redis, Ollama, Qdrant).
+- **Dashboard:** Aplikacja Streamlit (`scripts/monitoring/dashboard.py`) wizualizująca stan kolejek i systemu w czasie rzeczywistym.
+
 ---
 
 ## 4. Modele Danych
