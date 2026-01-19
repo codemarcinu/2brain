@@ -40,6 +40,12 @@ Thumbs.db
 *.log
 logs/
 
+# Backups
+backups/
+
+# Pipelines
+custom_pipelines/
+
 # Temporary
 tmp/
 temp/
