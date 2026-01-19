@@ -64,7 +64,10 @@ Jeśli masz paragon gdzieś indziej na dysku, użyj komendy:
 python brain.py finance /ścieżka/do/paragonu.jpg
 ```
 
-System użyje OCR oraz Sztucznej Inteligencji (LLM), aby „przeczytać” Twój paragon i zapisać wydatki w bazie danych. Wykresy i podsumowania możesz generować w przyszłości na podstawie zgromadzonych danych JSON.
+System użyje OCR oraz Sztucznej Inteligencji (LLM), aby „przeczytać” Twój paragon i zapisać wydatki. 
+
+> [!TIP]
+> **System uczy się Twoich zakupów!** Dzięki funkcji "Async Receipt Pipeline", system zapamiętuje produkty i sklepy. Przy kolejnych zakupach tych samych produktów przetwarzanie będzie błyskawiczne (nawet 5x szybciej), ponieważ system nie będzie musiał pytać Sztucznej Inteligencji o każdy produkt z osobna.
 
 ---
 

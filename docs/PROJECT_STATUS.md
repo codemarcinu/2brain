@@ -14,7 +14,7 @@
 | **05** | **Finance** | ✅ | Streamlit app for receipt processing & SQL storage. |
 | **06** | **Chat** | ✅ | Open Web UI integration with RAG (Vector Search). |
 | **07** | **Migration** | ✅ | Migration scripts, E2E tests, Monitoring Dashboard. |
-| **08** | **Finance & CLI** | ✅ | Headless Receipt Processor (OCR/LLM) + Brain CLI (TUI). |
+| **08** | **Finance & CLI** | ✅ | Headless Receipt Processor (OCR/LLM) + Async Receipt Pipeline + Brain CLI (TUI). |
 
 ## Current Capabilities
 

@@ -9,7 +9,7 @@ A microservices-based system for automating your Second Brain in Obsidian. Trans
 **Key Features:**
 - **📥 Universal Collector**: Automatically downloads and processes content from YouTube, Articles, and **Receipts**.
 - **🤖 AI Refinery**: Processes raw content into structured Markdown notes.
-- **💰 Finance Tracker**: Automated receipt OCR and data extraction (Headless).
+- **💰 Finance Tracker**: Optimized **Async Receipt Pipeline** for ultra-fast OCR and data extraction using caching and fuzzy matching.
 - **💬 AI Chat (RAG)**: Chat with your knowledge base using Open Web UI.
 - **🧠 Brain CLI**: Terminal Dashboard for status monitoring and management.
 

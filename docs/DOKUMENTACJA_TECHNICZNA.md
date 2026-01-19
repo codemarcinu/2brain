@@ -106,13 +106,18 @@ Biblioteka współdzielona przez wszystkie serwisy Python. Zapewnia spójność 
   3. Zapis pliku `.md` bezpośrednio do Obsidian Vault.
 
 ### 3.4 Finance Service (`modules/finance/`)
-Serwis do przetwarzania paragonów (Headless).
+Serwis do przetwarzania paragonów (Headless) zoptymalizowany pod kątem szybkości i kosztów.
 - **Typ:** Backend Worker.
-- **Funkcja:** Pobiera obrazy z `queue:finance`.
-- **Proces:**
-  1. **OCR:** Tesseract wyciąga tekst ze zdjęcia.
-  2. **LLM Extraction:** DeepSeek/Ollama analizuje tekst OCR i wyciąga JSON (Sklep, Data, Produkty).
-  3. **Archiwizacja:** Zapisuje wynikowy JSON w `data/receipts_archive`.
+- **Funkcja:** Pobiera obrazy z `queue:finance` i przetwarza je przez **Async Receipt Pipeline**.
+
+#### ⚙️ Architektura Potoku (Async Receipt Pipeline)
+System działa w modelu kaskadowym (waterfall) w celu minimalizacji użycia LLM:
+1.  **Warstwa 1 (Cache):** Sprawdza `ReceiptCache` (dokładne dopasowanie, LRU, wzorce sklepowe). Jeśli linia tekstu była już widziana, zwraca dane natychmiast.
+2.  **Warstwa 2 (Fuzzy Matching):** Równoległe dopasowywanie rozmyte (`rapidfuzz`) do znanej taksonomii produktów (`product_taxonomy.json`). Wykorzystuje `ThreadPoolExecutor`.
+3.  **Warstwa 3 (AI Fallback):** Asynchroniczne wywołanie LLM (DeepSeek-R1) tylko gdy "pokrycie" paragonu jest niskie (<30%).
+4.  **Normalizacja:** `TaxonomyGuard` dba o spójność nazw, kategorii i jednostek (np. "MLEKO UHT" -> "Mleko 3.2%").
+
+- **Output:** Zapisuje wynikowy JSON w `data/receipts_archive` oraz aktualizuje lokalny cache.
 
 ### 3.5 Brain CLI (`brain.py`)
 Centralny interfejs zarządzania systemem w terminalu.
