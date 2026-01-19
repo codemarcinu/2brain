@@ -48,8 +48,8 @@ class InboxFileHandler(FileSystemEventHandler):
                 logger.debug("file_ignored", file=file_path.name, reason="has '.tmp' suffix")
                 return
             
-            # Akceptuj tylko .txt i .url
-            if file_path.suffix not in ['.txt', '.url']:
+            # Akceptuj tylko .txt i .url oraz obrazy/PDF (receipts)
+            if file_path.suffix.lower() not in ['.txt', '.url', '.jpg', '.jpeg', '.png', '.pdf']:
                 logger.debug("file_ignored", file=file_path.name, reason="unsupported suffix")
                 return
             

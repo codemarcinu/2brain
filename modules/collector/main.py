@@ -4,6 +4,7 @@ Collector Service - Main Entry Point
 import time
 import signal
 import sys
+import json
 from pathlib import Path
 from urllib.parse import urlparse
 from shared.messaging import TaskQueue
@@ -48,22 +49,52 @@ class CollectorService:
         parsed = urlparse(url)
         return 'youtube.com' in parsed.netloc or 'youtu.be' in parsed.netloc
     
+
+
+    def process_receipt(self, file_path: Path):
+        """Przetwórz paragon/fakturę (obraz/PDF)"""
+        logger.info("receipt_processing_started", file=file_path.name)
+        
+        # Przygotuj payload dla Finance Service
+        # Finance oczekuje: { "id": "...", "file_path": "/inbox/..." }
+        
+        # Uwaga: file_path musi być ścieżką widoczną w kontenerze Finance.
+        # Oba kontenery mają mapowanie wolumenu na /inbox.
+        # Zakładamy, że file_path jest absolutną ścieżką w kontenerze Collector (/inbox/...)
+        
+        task_payload = {
+            "id": generate_task_id("fin"),
+            "file_path": str(file_path),
+            "timestamp": time.time()
+        }
+        
+        # Wyślij bezpośrednio do Redis (kolejka queue:finance)
+        # TaskQueue w shared lib domyślnie obsługuje tylko queue:refinery w metodzie send_to_refinery
+        # więc użyjemy surowego klienta redis z self.queue.redis
+        
+        try:
+            self.queue.redis.rpush("queue:finance", json.dumps(task_payload))
+            logger.info("finance_task_sent", file=file_path.name)
+        except Exception as e:
+            logger.error("finance_task_send_failed", file=file_path.name, error=str(e))
+            
     def process_file(self, file_path: Path):
         """
-        Przetwórz plik z linkiem
-        
-        Args:
-            file_path: Ścieżka do pliku .txt/.url z linkiem
+        Przetwórz plik z linkiem lub obraz
         """
         try:
-            # Odczytaj URL z pliku
+            # 1. Sprawdź czy to obraz/PDF (Paragon)
+            if file_path.suffix.lower() in ['.jpg', '.jpeg', '.png', '.pdf']:
+                self.process_receipt(file_path)
+                return
+
+            # 2. Jeśli tekstowy, odczytaj URL
             with open(file_path, 'r', encoding='utf-8') as f:
                 url = f.read().strip()
             
             # Basic validation
             if not url or not url.startswith('http'):
                 logger.warning("invalid_url_in_file", file=file_path.name, content=url[:50] if url else "empty")
-                # Move to error folder or delete? For now just log.
                 return
             
             logger.info("processing_url", url=url, source_file=file_path.name)
@@ -74,9 +105,10 @@ class CollectorService:
             else:
                 self.process_article(url)
             
-            # Usuń plik po przetworzeniu, aby nie przetwarzać go ponownie przy restarcie
-            # lub przenieś do processed?
-            # Na razie usuwamy zgodnie z logiką "pobierz i zapomnij"
+            # Usuń plik po przetworzeniu (dla linków)
+            # Dla obrazów (paragonów) też możemy usunąć, bo Finance sobie poradzi?
+            # NIE - Finance potrzebuje pliku! Finance go usunie lub zarchiwizuje.
+            # Więc usuwamy TYLKO pliki tekstowe z linkami.
             try:
                 file_path.unlink()
                 logger.info("source_file_deleted", file=file_path.name)

@@ -18,7 +18,7 @@ Aby uruchomić system (jeśli został zainstalowany):
 3. Poczekaj chwilę, aż wszystkie serwisy wstaną.
 
 ### Sprawdzenie czy działa
-- **Dashboard:** [http://localhost:8501](http://localhost:8501) (Zakładka "Overview")
+- **Dashboard (CLI):** Uruchom w terminalu `python brain.py status`
 - **Czat:** [http://localhost:3000](http://localhost:3000)
 
 ---
@@ -28,38 +28,43 @@ Aby uruchomić system (jeśli został zainstalowany):
 Najważniejszą funkcją systemu jest automatyczne "czytanie" i notowanie rzeczy za Ciebie.
 
 ### Jak dodać treść?
-Po prostu wrzuć plik tekstowy z linkiem do folderu `00_Inbox` w Twoim Obsidianie.
+Po prostu wrzuć plik do folderu `00_Inbox` w Twoim Obsidianie.
 
 #### YouTube 🎥
 Chcesz notatkę z filmu?
 1. Skopiuj link do filmu (np. `https://youtube.com/watch...`).
-2. Stwórz plik w `00_Inbox` (nazwa dowolna, np. `ciekawy_film.txt`).
+2. Stwórz plik `.txt` w `00_Inbox` (np. `ciekawy_film.txt`).
 3. Wklej link do środka i zapisz.
-4. **Gotowe!** Za kilka minut w folderze `YouTube` pojawi się notatka z podsumowaniem, kluczowymi punktami i pełną transkrypcją.
+4. **Gotowe!** Za kilka minut w folderze `YouTube` pojawi się notatka.
 
 #### Artykuły WWW 📰
 Znalazłeś ciekawy artykuł?
 1. Skopiuj jego adres URL.
-2. Stwórz plik w `00_Inbox` (np. `artykul_ai.txt`).
+2. Stwórz plik `.txt` w `00_Inbox`.
 3. Wklej link.
-4. **Gotowe!** System pobierze treść, usunie reklamy i stworzy notatkę w folderze `Articles`.
-
-> **Wskazówka:** System automatycznie usuwa plik z linkiem z `00_Inbox` po poprawnym przetworzeniu.
+4. **Gotowe!** Notatka pojawi się w folderze `Articles`.
 
 ---
 
 ## 💰 3. Finanse i Paragony
 
-System posiada dedykowaną aplikację do cyfryzacji paragonów.
+System automatycznie przetwarza zdjęcia paragonów, wyciągając z nich datę, sklep i kwotę.
 
-1. Wejdź na **[http://localhost:8501](http://localhost:8501)**.
-2. Wybierz z menu po lewej **"📤 Upload & Verify"**.
-3. **Wrzuć zdjęcie paragonu** (drag & drop).
-4. Poczekaj chwileczkę - AI odczyta dane: Sklep, Datę, Kwotę i Listę zakupów.
-5. **Sprawdź dane** w formularzu. Czasem AI myli "8" z "B", więc rzuć okiem.
-6. Kliknij **"✅ Save to Database"**.
+### Jak dodać paragon?
+Masz dwie opcje:
 
-Twoje wydatki są teraz bezpieczne w bazie danych SQL i widoczne w zakładce **"📊 Expenses Dashboard"** pod postacią wykresów.
+**Opcja 1: Drag & Drop**
+1. Skopiuj zdjęcie paragonu (`.jpg` lub `.png`) do folderu `00_Inbox`.
+2. System wykryje plik graficzny i automatycznie go przetworzy.
+3. Wynik (plik JSON) zostanie zapisany w `data/receipts_archive`.
+
+**Opcja 2: Brain CLI**
+Jeśli masz paragon gdzieś indziej na dysku, użyj komendy:
+```bash
+python brain.py finance /ścieżka/do/paragonu.jpg
+```
+
+System użyje OCR oraz Sztucznej Inteligencji (LLM), aby „przeczytać” Twój paragon i zapisać wydatki w bazie danych. Wykresy i podsumowania możesz generować w przyszłości na podstawie zgromadzonych danych JSON.
 
 ---
 

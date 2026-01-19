@@ -7,11 +7,11 @@ A microservices-based system for automating your Second Brain in Obsidian. Trans
 **Obsidian Brain v2** refactors a monolithic script into a robust, scalable architecture powered by Docker and Local LLMs (Ollama).
 
 **Key Features:**
-- **📥 Universal Collector**: Automatically downloads and processes content from YouTube (audio+transcription) and Web Articles.
-- **🤖 AI Refinery**: Processes raw content into structured Markdown notes with summaries, tags, and metadata using local LLMs.
-- **💰 Finance Tracker**: specialized UI for uploading and digitizing receipts into structured data.
-- **💬 AI Chat (RAG)**: Chat with your knowledge base using Open Web UI and vector search (Qdrant).
-- **📊 Monitoring**: Real-time dashboard for system health and task queues.
+- **📥 Universal Collector**: Automatically downloads and processes content from YouTube, Articles, and **Receipts**.
+- **🤖 AI Refinery**: Processes raw content into structured Markdown notes.
+- **💰 Finance Tracker**: Automated receipt OCR and data extraction (Headless).
+- **💬 AI Chat (RAG)**: Chat with your knowledge base using Open Web UI.
+- **🧠 Brain CLI**: Terminal Dashboard for status monitoring and management.
 
 ## 🏗️ Architecture
 
@@ -20,37 +20,37 @@ graph LR
     subgraph Input
         I1[00_Inbox / YouTube]
         I2[00_Inbox / Articles]
-        I3[Finance UI]
+        I3[00_Inbox / Receipts]
     end
 
     subgraph Core Services
         C[Collector] -->|Raw Data| Q1[Redis Queue]
         Q1 --> R[Refinery]
+        Q1 --> F[Finance]
         R -->|Markdown| V[Obsidian Vault]
-        I3 -->|Receipt Data| DB[PostgreSQL]
+        F -->|JSON| Archive[Data Archive]
     end
 
     subgraph Intelligence
         R <-->|Inference| O[Ollama (Local LLM)]
+        F <-->|Extraction| O
         R -->|Embeddings| QD[Qdrant (Vector DB)]
-        V -->|Indexing| QD
     end
 
     subgraph User Interface
         Chat[Open Web UI] <-->|RAG| QD
-        Chat <-->|LLM| O
-        Dash[Streamlit Dashboard]
+        CLI[Brain CLI] -->|Monitor| Q1
     end
 ```
 
 ### Microservices
 | Service | Technology | Description |
 |---------|------------|-------------|
-| **Collector** | Python | Watchdog service for `00_Inbox`. Downloads YT audio/video & scrapes web pages. |
-| **Refinery** | Python, LangChain | AI Worker. Summarizes content, extracts tags, generates Markdown. |
-| **Finance** | Streamlit | Web UI for receipt processing and expense tracking. |
+| **Collector** | Python | Watchdog service. Routes links vs images (receipts). |
+| **Refinery** | Python, LangChain | AI Worker for content processing. |
+| **Finance** | Python (Headless) | Receipt OCR and LLM extraction service. |
 | **Chat** | Open Web UI | ChatGPT-like interface for chatting with your notes. |
-| **Infrastructure** | Redis, Postgres, Qdrant | Message broker, relational DB, and vector store. |
+| **CLI** | Python, Rich | Terminal UI for status and management. |
 
 ## 🛠️ Installation
 
@@ -80,7 +80,12 @@ graph LR
    ```
    *Critical settings:* `OBSIDIAN_VAULT_PATH`, `POSTGRES_PASSWORD`.
 
-4. **Start Services:**
+4. **Install CLI dependencies:**
+   ```bash
+   pip install -r requirements-cli.txt
+   ```
+
+5. **Start Services:**
    ```bash
    docker compose up -d
    ```
@@ -94,9 +99,13 @@ Simply drop a text file with a URL into your Obsidian Inbox folder (e.g., `00_In
 *The Collector will pick it up, process it, and the Refinery will create a new Note in your vault.*
 
 ### 2. Expense Tracking (Finance)
-1. Open http://localhost:8501
-2. Upload a photo of a receipt.
-3. Verify the extracted data and click Save.
+To process a receipt, you can either:
+- **Drag & Drop**: Copy an image (`.jpg`, `.png`) to the `data/inbox` folder.
+- **CLI**: Use the helper command:
+  ```bash
+  python brain.py finance /path/to/receipt.jpg
+  ```
+The system will OCR the receipt and save structured data to `data/receipts_archive`.
 
 ### 3. Chatting with Notes
 1. Open http://localhost:3000
@@ -104,15 +113,11 @@ Simply drop a text file with a URL into your Obsidian Inbox folder (e.g., `00_In
 3. Select a model (e.g., `deepseek-r1`).
 4. Ask questions about your notes!
 
-### 4. Monitoring
-1. Run the dashboard:
-   ```bash
-   streamlit run scripts/monitoring/dashboard.py
-   ```
-2. Or use the CLI health check:
-   ```bash
-   python scripts/monitoring/health_check.py
-   ```
+### 4. Monitoring (CLI)
+View the system status dashboard:
+```bash
+python brain.py status
+```
 
 ## 🔧 Operations
 

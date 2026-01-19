@@ -1,22 +1,16 @@
-# Streamlit
-streamlit>=1.30.0
-
-# OCR
+# OCR & Image Processing
 pytesseract>=0.3.10
-pillow>=10.0.0
-opencv-python-headless>=4.8.0
+Pillow>=10.0.0
 
-# Alternative OCR (optional)
-# paddleocr>=2.7.0
+# Fuzzy Matching
+thefuzz[speedup]>=0.22.0
 
-# LLM for parsing
-openai>=1.10.0  # For DeepSeek API
+# AI / LLM
+openai>=1.0.0  # Common interface for Ollama/DeepSeek
 
-# Database
-sqlalchemy>=2.0.0
-psycopg2-binary>=2.9.0
-alembic>=1.13.0
+# Shared
+# obsidian-brain-shared @ file:///shared
 
-# Utilities
-pandas>=2.1.0
-plotly>=5.18.0  # For charts in UI
+# Utils
+python-dotenv>=1.0.0
+watchdog>=4.0.0

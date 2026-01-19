@@ -14,13 +14,14 @@
 | **05** | **Finance** | ✅ | Streamlit app for receipt processing & SQL storage. |
 | **06** | **Chat** | ✅ | Open Web UI integration with RAG (Vector Search). |
 | **07** | **Migration** | ✅ | Migration scripts, E2E tests, Monitoring Dashboard. |
+| **08** | **Finance & CLI** | ✅ | Headless Receipt Processor (OCR/LLM) + Brain CLI (TUI). |
 
 ## Current Capabilities
 
 - **Automated Ingestion**: System successfully detects links in `00_Inbox`, downloads content, and uses Local LLMs to generate formatted Obsidian notes.
 - **RAG Chat**: Users can query their knowledge base using a ChatGPT-like interface running locally.
-- **Finance Digitization**: Manual upload and verification flow for receipts is operational.
-- **Observability**: Basic health checks and dashboard for monitoring queue depths and service status.
+- **Finance Digitization**: Automated receipt OCR and extracting using CLI or drag & drop.
+- **CLI Management**: Unified terminal interface for system status and control.
 
 ## Known Limitations
 
@@ -30,7 +31,6 @@
 
 ## Future Roadmap
 
-- [ ] **Multi-modal Input**: Support for voice notes and image processing in the Collector.
 - [ ] **Advanced RAG**: Better chunking strategies and re-ranking for higher search relevance.
 - [ ] **Automatic Tagging**: Fine-tune a small model specifically for personal taxonomy.
 - [ ] **Mobile App**: A dedicated mobile companion for quick capture (Voice/Photo) sending directly to the API.

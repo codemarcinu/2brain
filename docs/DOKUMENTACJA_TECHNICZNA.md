@@ -75,7 +75,7 @@ graph TD
 | **Baza Danych (Relacyjna)** | PostgreSQL | Przechowywanie danych strukturalnych (finanse) |
 | **Baza Wektorowa** | Qdrant | Wyszukiwanie semantyczne (RAG) |
 | **AI / LLM** | Ollama (DeepSeek-R1, Llama 3) | Lokalne przetwarzanie języka naturalnego |
-| **Frontend** | Streamlit (Finance), Open Web UI (Chat) | Interfejsy dla użytkownika |
+| **Frontend** | Brain CLI (Rich), Open Web UI | Interfejsy dla użytkownika |
 
 ---
 
@@ -90,11 +90,12 @@ Biblioteka współdzielona przez wszystkie serwisy Python. Zapewnia spójność 
 
 ### 3.2 Collector Service (`modules/collector/`)
 "Oczy i uszy" systemu. Odpowiada za pobieranie surowych danych.
-- **Funkcja:** Monitoruje folder `00_Inbox` na obecność plików tekstowych z linkami.
+- **Funkcja:** Monitoruje folder `00_Inbox` na obecność plików.
 - **Obsługiwane źródła:**
-  - **YouTube:** Pobiera audio, transkrybuje (Whisper), pobiera metadane.
-  - **Artykuły WWW:** Pobiera treść (Trafilatura), usuwa reklamy/menu.
-- **Output:** Wysyła zadanie z surowymi danymi do kolejki `queue:refinery`.
+  - **YouTube:** Pobiera audio, transkrybuje (Whisper).
+  - **Artykuły:** Pobiera treść (Trafilatura).
+  - **Paragony:** Wykrywa obrazy (`.jpg`, `.png`) i przesyła do Finance.
+- **Output:** Wysyła zadania do `queue:refinery` lub `queue:finance`.
 
 ### 3.3 Refinery Service (`modules/refinery/`)
 "Mózg" systemu. Przetwarza surowe dane na gotowe notatki.
@@ -103,17 +104,23 @@ Biblioteka współdzielona przez wszystkie serwisy Python. Zapewnia spójność 
   1. Analiza treści (Podsumowanie, Kluczowe punkty, Tagi).
   2. Mapowanie na szablon Jinja2.
   3. Zapis pliku `.md` bezpośrednio do Obsidian Vault.
-  4. Deduplikacja nazw plików.
 
 ### 3.4 Finance Service (`modules/finance/`)
-Serwis do zarządzania wydatkami z interfejsem "Human-in-the-loop".
-- **Interfejs:** Aplikacja w Streamlit (`http://localhost:8501`).
+Serwis do przetwarzania paragonów (Headless).
+- **Typ:** Backend Worker.
+- **Funkcja:** Pobiera obrazy z `queue:finance`.
 - **Proces:**
-  1. Upload zdjęcia paragonu.
-  2. OCR (Tesseract) + Parsing AI (DeepSeek) do JSON.
-  3. Weryfikacja danych przez użytkownika w UI.
-  4. Zapis do bazy PostgreSQL.
-- **Monitoring:** Dashboard wydatków i statystyki.
+  1. **OCR:** Tesseract wyciąga tekst ze zdjęcia.
+  2. **LLM Extraction:** DeepSeek/Ollama analizuje tekst OCR i wyciąga JSON (Sklep, Data, Produkty).
+  3. **Archiwizacja:** Zapisuje wynikowy JSON w `data/receipts_archive`.
+
+### 3.5 Brain CLI (`brain.py`)
+Centralny interfejs zarządzania systemem w terminalu.
+- **Technologia:** Python + Rich + Typer.
+- **Funkcje:**
+  - `status`: Dashboard monitorujący kontenery Docker i kolejki Redis.
+  - `finance`: Pomocnik do wrzucania paragonów do Inbox.
+  - `chat`: (Planowane) Interfejs czatu w terminalu.
 
 ### 3.5 Chat Service (`modules/chat/`)
 Interfejs konwersacyjny z własną bazą wiedzy.
